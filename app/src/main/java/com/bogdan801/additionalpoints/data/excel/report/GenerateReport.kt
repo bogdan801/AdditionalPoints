@@ -99,8 +99,34 @@ suspend fun createMonthSheet(workbook: XSSFWorkbook, month: String, context: Con
 
     //STUDENT BUDGET TYPE TITLE
     //row
+    val budgetTypeRow = sheet.createRow(2)
+    budgetTypeRow.rowStyle = styleMain
+    sheet.addMergedRegion(CellRangeAddress(2,2,0,7))
+    pt.drawBorders(CellRangeAddress(2,2,0,7), BorderStyle.THIN, BorderExtent.OUTSIDE)
 
     //cell
+    val budgetTypeCell = budgetTypeRow.createCell(0)
+    budgetTypeCell.setCellValue("Студенти, які  навчаються за державним замовленням")
+    budgetTypeCell.cellStyle = styleMain
+
+    //BUDGET STUDENTS LIST
+
+
+    //STUDENT CONTRACT TYPE TITLE
+    //row
+    val contractRowIndex = 3
+    val contractTypeRow = sheet.createRow(contractRowIndex)
+    contractTypeRow.rowStyle = styleMain
+    sheet.addMergedRegion(CellRangeAddress(contractRowIndex,contractRowIndex,0,7))
+    pt.drawBorders(CellRangeAddress(contractRowIndex,contractRowIndex,0,7), BorderStyle.THIN, BorderExtent.OUTSIDE)
+
+    //cell
+    val contractTypeCell = contractTypeRow.createCell(0)
+    contractTypeCell.setCellValue("Студенти, які  навчаються за умов договору")
+    contractTypeCell.cellStyle = styleMain
+
+    //CONTRACT STUDENTS LIST
+
 
     pt.applyBorders(sheet)
 }
