@@ -71,6 +71,9 @@ interface Dao {
     @Query("SELECT * FROM studententity WHERE groupID == :groupID")
     fun getStudentsByGroup(groupID: Int) : Flow<List<StudentEntity>>
 
+    @Query("SELECT * FROM studententity WHERE groupID == :groupID AND isContract == :isContract")
+    suspend fun getStudentsByGroupAndType(groupID: Int, isContract: Int) : List<StudentEntity>
+
     @Transaction
     @Query("SELECT * FROM studententity")
     fun getStudentWithActivities() : Flow<List<StudentWithActivitiesJunction>>

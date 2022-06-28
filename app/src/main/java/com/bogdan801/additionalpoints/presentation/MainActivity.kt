@@ -60,14 +60,16 @@ class MainActivity : ComponentActivity() {
             repository.insertStudent(StudentEntity(0, 2, "Дарійчук Юрій Батькович", false))
 
             repository.insertStudentActivity(StudentActivityEntity(0, 1, 86, "інстаграм вікторина «Новорічна вікторина»", "28.12.2021", 0.6f))
+            repository.insertStudentActivity(StudentActivityEntity(0, 1, 86, "інстаграм вікторина «Новорічна домівка»", "29.12.2021", 1f))
             repository.insertStudentActivity(StudentActivityEntity(0, 2, 86, "інстаграм вікторина «Новорічна вікторина»", "31.12.2021", 0.8f))
+            repository.insertStudentActivity(StudentActivityEntity(0, 3, 86, "інстаграм вікторина «Новорічна вікторина»", "28.12.2021", 0.8f))
         }
 
         val launcher = createExcelURILauncher(this){
             lateinit var workbook: XSSFWorkbook
             val context = this
             runBlocking{
-                workbook = repository.generateReportWorkbook(listOf("12.2021"), context)
+                workbook = repository.generateReportWorkbook(listOf("12.2021"), 1, context)
             }
             workbook.write(contentResolver.openOutputStream(it))
 

@@ -78,6 +78,8 @@ class RepositoryImpl(
 
     override fun getStudentsByGroup(groupID: Int) : Flow<List<StudentEntity>> = dbDao.getStudentsByGroup(groupID)
 
+    override suspend fun getStudentsByGroupAndType(groupID: Int, isContract: Int) : List<StudentEntity> = dbDao.getStudentsByGroupAndType(groupID, isContract)
+
     override fun getGroupWithStudentsJunction(): Flow<List<GroupWithStudentsJunction>> = dbDao.getGroupWithStudents()
 
     override suspend fun getGroupWithStudentsJunctionByID(groupID: Int): GroupWithStudentsJunction = dbDao.getGroupWithStudentsJunctionByID(groupID)
@@ -91,5 +93,5 @@ class RepositoryImpl(
     override suspend fun getGetStudentActivitiesByMonth(studentID: Int, month: String): List<StudentActivityEntity> = dbDao.getGetStudentActivitiesByMonth(studentID, month)
 
     //generate exel report
-    override suspend fun generateReportWorkbook(months: List<String>, context: Context): XSSFWorkbook = generateReport(months, context, this)
+    override suspend fun generateReportWorkbook(months: List<String>, groupID: Int, context: Context): XSSFWorkbook = generateReport(months, groupID, context, this)
 }

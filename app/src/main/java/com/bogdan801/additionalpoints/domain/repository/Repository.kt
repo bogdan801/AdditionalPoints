@@ -31,6 +31,7 @@ interface Repository {
     fun getGroups(): Flow<List<GroupEntity>>
     fun getStudents(): Flow<List<StudentEntity>>
     fun getStudentsByGroup(groupID: Int) : Flow<List<StudentEntity>>
+    suspend fun getStudentsByGroupAndType(groupID: Int, isContract: Int) : List<StudentEntity>
     fun getGroupWithStudentsJunction(): Flow<List<GroupWithStudentsJunction>>
     suspend fun getGroupWithStudentsJunctionByID(groupID: Int): GroupWithStudentsJunction
     fun getStudentWithActivitiesJunction(): Flow<List<StudentWithActivitiesJunction>>
@@ -39,5 +40,5 @@ interface Repository {
     suspend fun getGetStudentActivitiesByMonth(studentID: Int, month: String): List<StudentActivityEntity>
 
     //generate exel report
-    suspend fun generateReportWorkbook(months: List<String>, context: Context): XSSFWorkbook
+    suspend fun generateReportWorkbook(months: List<String>, groupID: Int, context: Context): XSSFWorkbook
 }
