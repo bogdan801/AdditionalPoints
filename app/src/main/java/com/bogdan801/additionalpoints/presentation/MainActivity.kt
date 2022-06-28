@@ -1,10 +1,6 @@
 package com.bogdan801.additionalpoints.presentation
 
-import android.content.Context
-import android.database.Cursor
-import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,28 +10,15 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import androidx.lifecycle.lifecycleScope
 import com.bogdan801.additionalpoints.data.database.entities.GroupEntity
 import com.bogdan801.additionalpoints.data.database.entities.StudentActivityEntity
 import com.bogdan801.additionalpoints.data.database.entities.StudentEntity
+import com.bogdan801.additionalpoints.data.excel.report.AdditionalReportInfo
 import com.bogdan801.additionalpoints.data.excel.util.createExcelURILauncher
-import com.bogdan801.additionalpoints.data.mapper.toActivityInformation
-import com.bogdan801.additionalpoints.domain.model.ActivityInformation
 import com.bogdan801.additionalpoints.domain.repository.Repository
-import com.bogdan801.additionalpoints.presentation.custom.composable.ActivityInformationTable
 import com.bogdan801.additionalpoints.presentation.theme.AdditionalPointsTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import org.apache.poi.ss.usermodel.BorderExtent
-import org.apache.poi.ss.usermodel.BorderStyle
-import org.apache.poi.ss.usermodel.HorizontalAlignment
-import org.apache.poi.ss.usermodel.VerticalAlignment
-import org.apache.poi.ss.util.CellRangeAddress
-import org.apache.poi.ss.util.PropertyTemplate
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import javax.inject.Inject
 
@@ -63,13 +46,14 @@ class MainActivity : ComponentActivity() {
             repository.insertStudentActivity(StudentActivityEntity(0, 1, 86, "інстаграм вікторина «Новорічна домівка»", "29.12.2021", 1f))
             repository.insertStudentActivity(StudentActivityEntity(0, 2, 86, "інстаграм вікторина «Новорічна вікторина»", "31.12.2021", 0.8f))
             repository.insertStudentActivity(StudentActivityEntity(0, 3, 86, "інстаграм вікторина «Новорічна вікторина»", "28.12.2021", 0.8f))
+            repository.insertStudentActivity(StudentActivityEntity(0, 1, 86, "інстаграм вікторина «Вгадай серіал»", "29.01.2022", 1f))
+            repository.insertStudentActivity(StudentActivityEntity(0, 2, 86, "інстаграм вікторина «Вгадай серіал»", "31.01.2022", 1f))
         }
 
         val launcher = createExcelURILauncher(this){
             lateinit var workbook: XSSFWorkbook
-            val context = this
             runBlocking{
-                workbook = repository.generateReportWorkbook(listOf("12.2021"), 1, context)
+                workbook = repository.generateReportWorkbook(listOf("12.2021", "01.2022"), 1, AdditionalReportInfo("3", "ФІТ", "Григурко Д. Б.", "Лізка"))
             }
             workbook.write(contentResolver.openOutputStream(it))
 

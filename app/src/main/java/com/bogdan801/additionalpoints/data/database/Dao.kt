@@ -57,6 +57,9 @@ interface Dao {
     @Query("SELECT * FROM groupentity")
     fun getGroups() : Flow<List<GroupEntity>>
 
+    @Query("SELECT name FROM groupentity WHERE groupID == :groupId")
+    suspend fun getGroupNameByID(groupId: Int): String
+
     @Transaction
     @Query("SELECT * FROM groupentity")
     fun getGroupWithStudents() : Flow<List<GroupWithStudentsJunction>>
@@ -65,21 +68,21 @@ interface Dao {
     @Query("SELECT * FROM groupentity WHERE groupID == :groupID")
     suspend fun getGroupWithStudentsJunctionByID(groupID: Int): GroupWithStudentsJunction
 
-    @Query("SELECT * FROM studententity")
+    @Query("SELECT * FROM studententity ORDER BY fullName")
     fun getStudents() : Flow<List<StudentEntity>>
 
-    @Query("SELECT * FROM studententity WHERE groupID == :groupID")
+    @Query("SELECT * FROM studententity WHERE groupID == :groupID ORDER BY fullName")
     fun getStudentsByGroup(groupID: Int) : Flow<List<StudentEntity>>
 
-    @Query("SELECT * FROM studententity WHERE groupID == :groupID AND isContract == :isContract")
+    @Query("SELECT * FROM studententity WHERE groupID == :groupID AND isContract == :isContract ORDER BY fullName")
     suspend fun getStudentsByGroupAndType(groupID: Int, isContract: Int) : List<StudentEntity>
 
     @Transaction
-    @Query("SELECT * FROM studententity")
+    @Query("SELECT * FROM studententity ORDER BY fullName")
     fun getStudentWithActivities() : Flow<List<StudentWithActivitiesJunction>>
 
     @Transaction
-    @Query("SELECT * FROM studententity WHERE studentID == :studentID")
+    @Query("SELECT * FROM studententity WHERE studentID == :studentID  ORDER BY fullName")
     suspend fun getStudentWithActivitiesJunctionByID(studentID: Int): StudentWithActivitiesJunction
 
     @Query("SELECT date FROM studentactivityentity INNER JOIN studententity ON studentactivityentity.studentID=studententity.studentID WHERE groupID == :groupID")

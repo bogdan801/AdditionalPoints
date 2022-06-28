@@ -8,6 +8,7 @@ import com.bogdan801.additionalpoints.data.database.entities.StudentActivityEnti
 import com.bogdan801.additionalpoints.data.database.entities.StudentEntity
 import com.bogdan801.additionalpoints.data.database.entities.relations.GroupWithStudentsJunction
 import com.bogdan801.additionalpoints.data.database.entities.relations.StudentWithActivitiesJunction
+import com.bogdan801.additionalpoints.data.excel.report.AdditionalReportInfo
 import com.bogdan801.additionalpoints.data.excel.report.generateReport
 import com.bogdan801.additionalpoints.domain.repository.Repository
 import kotlinx.coroutines.flow.Flow
@@ -74,6 +75,8 @@ class RepositoryImpl(
 
     override fun getGroups(): Flow<List<GroupEntity>> = dbDao.getGroups()
 
+    override suspend fun getGroupNameByID(groupId: Int): String = dbDao.getGroupNameByID(groupId)
+
     override fun getStudents(): Flow<List<StudentEntity>> = dbDao.getStudents()
 
     override fun getStudentsByGroup(groupID: Int) : Flow<List<StudentEntity>> = dbDao.getStudentsByGroup(groupID)
@@ -93,5 +96,5 @@ class RepositoryImpl(
     override suspend fun getGetStudentActivitiesByMonth(studentID: Int, month: String): List<StudentActivityEntity> = dbDao.getGetStudentActivitiesByMonth(studentID, month)
 
     //generate exel report
-    override suspend fun generateReportWorkbook(months: List<String>, groupID: Int, context: Context): XSSFWorkbook = generateReport(months, groupID, context, this)
+    override suspend fun generateReportWorkbook(months: List<String>, groupID: Int, additionalInfo: AdditionalReportInfo): XSSFWorkbook = generateReport(months, groupID, this, additionalInfo)
 }
