@@ -2,7 +2,8 @@ package com.bogdan801.additionalpoints.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
+val Green20 = Color(0xFFF2F2E8)
+val Green40 = Color(0xFFF3F4D4)
+val Green80 = Color(0xFF92A760)
+val Green100 = Color(0xFF436129)
+val Yellow = Color(0xFFF2C51C)
