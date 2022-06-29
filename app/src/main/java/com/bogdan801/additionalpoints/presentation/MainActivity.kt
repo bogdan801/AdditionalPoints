@@ -60,19 +60,6 @@ class MainActivity : ComponentActivity() {
             Toast.makeText(this, "Workbook has been saved", Toast.LENGTH_LONG).show()
         }
 
-        /*val workBook = XSSFWorkbook()
-        val sheet = workBook.createSheet("Лютий")
-        val row = sheet.createRow(0)
-        val cell = row.createCell(0)
-        cell.setCellValue("гигиги, я молодець")
-        sheet.addMergedRegion(CellRangeAddress(0,1,0,2))
-        val pt = PropertyTemplate()
-        pt.drawBorders(CellRangeAddress(0,1,0,2), BorderStyle.THIN, BorderExtent.OUTSIDE)
-        pt.applyBorders(sheet)
-        cell.cellStyle.verticalAlignment = VerticalAlignment.CENTER
-        cell.cellStyle.alignment = HorizontalAlignment.CENTER
-        */
-
         setContent {
             AdditionalPointsTheme {
                 /*ActivityInformationTable(
@@ -90,7 +77,6 @@ class MainActivity : ComponentActivity() {
                         Text(text = "Create file")
                     }
                 }
-
             }
         }
     }
