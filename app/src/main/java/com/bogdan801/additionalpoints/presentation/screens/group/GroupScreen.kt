@@ -15,6 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.bogdan801.additionalpoints.presentation.custom.composable.CustomTopAppBar
+import com.bogdan801.additionalpoints.presentation.custom.composable.GroupSelector
 import com.bogdan801.additionalpoints.presentation.theme.AdditionalPointsTheme
 import kotlinx.coroutines.launch
 
@@ -28,38 +30,33 @@ fun GroupScreen(
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            TopAppBar(
-                backgroundColor = MaterialTheme.colors.primary,
-                contentColor = MaterialTheme.colors.onPrimary,
-            ) {
-                Box(modifier = Modifier.fillMaxSize()){
+            CustomTopAppBar(
+                iconButton = {
                     IconButton(
                         onClick = {
                             scope.launch {
                                 scaffoldState.drawerState.open()
                             }
-                        },
-                        modifier = Modifier.align(Alignment.CenterStart)
+                        }
                     ) {
                         Icon(imageVector = Icons.Default.Menu, contentDescription = "Open Menu")
                     }
-
+                },
+                title = {
                     Text(
                         modifier = Modifier.align(Alignment.Center),
                         text = "NULES",
                         style = MaterialTheme.typography.h1
                     )
                 }
-
-
-            }
+            )
         },
 
     ) {
         Column(modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.background)) {
-
+        ) {
+            GroupSelector()
         }
     }
 }

@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -18,12 +19,12 @@ import com.bogdan801.additionalpoints.domain.model.ActivityInformation
 fun ActivityInformationTable(
     data: List<ActivityInformation>,
     columnWeights: ColumnWeights = ColumnWeights(),
-    headerBackgroundColor: Color =  Color(0xFF66BB6A),
-    contentBackgroundColor: Color = Color.White,
-    headerTextColor: Color = Color.Black,
-    contentTextColor: Color = Color.Black,
-    headerBorderColor: Color = Color.Black,
-    contentBorderColor: Color = Color.Black,
+    headerBackgroundColor: Color =  MaterialTheme.colors.secondaryVariant,
+    contentBackgroundColor: Color = MaterialTheme.colors.onPrimary,
+    headerTextColor: Color = MaterialTheme.colors.onBackground,
+    contentTextColor: Color = MaterialTheme.colors.onBackground,
+    headerBorderColor: Color = MaterialTheme.colors.onBackground,
+    contentBorderColor: Color = MaterialTheme.colors.onBackground,
     headerBorderWidth: Dp = 1.dp,
     contentBorderWidth: Dp = 1.dp,
     isHeaderUpper: Boolean = false
