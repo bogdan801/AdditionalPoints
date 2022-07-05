@@ -14,6 +14,7 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import com.bogdan801.additionalpoints.R
 import com.bogdan801.additionalpoints.data.database.entities.GroupEntity
 import com.bogdan801.additionalpoints.data.database.entities.StudentActivityEntity
 import com.bogdan801.additionalpoints.data.database.entities.StudentEntity
@@ -21,6 +22,7 @@ import com.bogdan801.additionalpoints.data.excel.report.AdditionalReportInfo
 import com.bogdan801.additionalpoints.data.excel.util.createExcelURILauncher
 import com.bogdan801.additionalpoints.domain.repository.Repository
 import com.bogdan801.additionalpoints.presentation.screens.group.GroupScreen
+import com.bogdan801.additionalpoints.presentation.screens.info.InfoScreen
 import com.bogdan801.additionalpoints.presentation.theme.AdditionalPointsTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.runBlocking
@@ -68,7 +70,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             AdditionalPointsTheme {
                 Surface(modifier = Modifier.background(MaterialTheme.colors.background)) {
-                    GroupScreen()
+                    //GroupScreen()
+                    InfoScreen()
                 }
                 /*ActivityInformationTable(
                     data = activityInfoList,
@@ -78,7 +81,7 @@ class MainActivity : ComponentActivity() {
                     headerBorderColor = Color(0xFF92A760),
                     contentBorderWidth = 0.5.dp,
                     contentBorderColor = Color.Gray
-
+                )
 
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Button(onClick = {launcher.launch("file.xlsx") }) {

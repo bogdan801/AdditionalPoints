@@ -245,7 +245,7 @@ suspend fun createGeneralSheet(
         }
 
         createCell(studentRow, colIndex-1, String.format("%.2f", sum), cellStyle = styleRegular)
-        createCell(studentRow, colIndex, String.format("%.2f", sum), cellStyle = styleRegular)
+        createCell(studentRow, colIndex, String.format("%.2f", if(sum>10) 10 else sum), cellStyle = styleRegular)
 
         pt.drawBorders(CellRangeAddress(rowNumber,rowNumber,0,colIndex), BorderStyle.THIN, BorderExtent.ALL)
         rowNumber++

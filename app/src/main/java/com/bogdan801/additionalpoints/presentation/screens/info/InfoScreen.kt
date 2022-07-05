@@ -1,4 +1,4 @@
-package com.bogdan801.additionalpoints.presentation.screens.group
+package com.bogdan801.additionalpoints.presentation.screens.info
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
@@ -14,23 +14,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
-//import androidx.hilt.navigation.compose.hiltViewModel
-//import androidx.navigation.NavHostController
-import com.bogdan801.additionalpoints.presentation.custom.composable.CustomTopAppBar
-import com.bogdan801.additionalpoints.presentation.custom.composable.GroupSelector
-import com.bogdan801.additionalpoints.presentation.custom.composable.MenuDrawer
-import com.bogdan801.additionalpoints.presentation.theme.AdditionalPointsTheme
-import kotlinx.coroutines.launch
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.bogdan801.additionalpoints.R
+import com.bogdan801.additionalpoints.presentation.custom.composable.ActivityInformationTable
+import com.bogdan801.additionalpoints.presentation.custom.composable.CustomTopAppBar
 import com.bogdan801.additionalpoints.presentation.custom.composable.DrawerMenuItem
+import com.bogdan801.additionalpoints.presentation.custom.composable.MenuDrawer
+import kotlinx.coroutines.launch
+
+//import androidx.navigation.NavHostController
 
 @Composable
-fun GroupScreen(
+fun InfoScreen(
     //navController: NavHostController? = null,
-    //viewModel: GroupViewModel = hiltViewModel()
+    viewModel: InfoViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -53,8 +54,8 @@ fun GroupScreen(
                 title = {
                     Text(
                         modifier = Modifier.align(Alignment.Center),
-                        text = "NULES",
-                        style = MaterialTheme.typography.h1
+                        text = "Довідка",
+                        style = MaterialTheme.typography.h2
                     )
                 }
             )
@@ -67,7 +68,6 @@ fun GroupScreen(
                 DrawerMenuItem(
                     description = "Головна",
                     iconImageVector = Icons.Default.Home,
-                    iconTint = MaterialTheme.colors.secondary,
                     onItemClick = {
                         scope.launch {
                             scaffoldState.drawerState.close()
@@ -86,6 +86,7 @@ fun GroupScreen(
                 DrawerMenuItem(
                     description = "Довідка",
                     iconImageVector = Icons.Default.Info,
+                    iconTint = MaterialTheme.colors.secondary,
                     onItemClick = {
                         scope.launch {
                             scaffoldState.drawerState.close()
@@ -96,35 +97,14 @@ fun GroupScreen(
         }
 
     ) {
-        Column(modifier = Modifier
-            .fillMaxSize()
-        ) {
-            val indexState = remember {
-                mutableStateOf(0)
-            }
-
-            GroupSelector(
-                data = listOf("КН19001б", "КН19002б"),
-                onGroupSelected = { _, text ->
-                    Toast.makeText(context, "${indexState.value} - $text", Toast.LENGTH_SHORT).show()
-                },
-                indexState = indexState,
-                onAddGroupClick = {
-                    Toast.makeText(context, "Adding group", Toast.LENGTH_SHORT).show()
-                },
-                onDeleteGroupClick = {
-                    Toast.makeText(context, "Deleting group", Toast.LENGTH_SHORT).show()
-                },
-                showButtons = true
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
-fun Preview() {
-    AdditionalPointsTheme {
-        GroupScreen()
+        ActivityInformationTable(
+            data = viewModel.activityListState.value,
+            headerBackgroundColor = MaterialTheme.colors.secondaryVariant,
+            headerTextColor = MaterialTheme.colors.onPrimary,
+            headerBorderWidth = 0.5.dp,
+            headerBorderColor = MaterialTheme.colors.primary,
+            contentBorderWidth = 0.5.dp,
+            contentBorderColor = Color.Gray
+        )
     }
 }
