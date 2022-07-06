@@ -1,4 +1,4 @@
-package com.bogdan801.additionalpoints.presentation.custom.composable
+package com.bogdan801.additionalpoints.presentation.custom.composable.drawer
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*

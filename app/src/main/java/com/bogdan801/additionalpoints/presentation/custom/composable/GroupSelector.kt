@@ -41,7 +41,6 @@ fun GroupSelector(
                     .fillMaxHeight(),
                 contentAlignment = Alignment.Center
             ){
-
                 CustomDropDownMenu(
                     data = data,
                     onItemSelected = onGroupSelected,

@@ -19,13 +19,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 //import androidx.hilt.navigation.compose.hiltViewModel
 //import androidx.navigation.NavHostController
-import com.bogdan801.additionalpoints.presentation.custom.composable.CustomTopAppBar
-import com.bogdan801.additionalpoints.presentation.custom.composable.GroupSelector
-import com.bogdan801.additionalpoints.presentation.custom.composable.MenuDrawer
 import com.bogdan801.additionalpoints.presentation.theme.AdditionalPointsTheme
 import kotlinx.coroutines.launch
 import com.bogdan801.additionalpoints.R
-import com.bogdan801.additionalpoints.presentation.custom.composable.DrawerMenuItem
+import com.bogdan801.additionalpoints.presentation.custom.composable.*
+import com.bogdan801.additionalpoints.presentation.custom.composable.dialogbox.BasicDialogBox
+import com.bogdan801.additionalpoints.presentation.custom.composable.dialogbox.CreateGroupDialog
+import com.bogdan801.additionalpoints.presentation.custom.composable.drawer.DrawerMenuItem
+import com.bogdan801.additionalpoints.presentation.custom.composable.drawer.MenuDrawer
 
 @Composable
 fun GroupScreen(
@@ -96,6 +97,24 @@ fun GroupScreen(
         }
 
     ) {
+
+        val showAddGroupDialogState = remember {
+            mutableStateOf(false)
+        }
+
+        val newGroupNameState = remember {
+            mutableStateOf("")
+        }
+
+        CreateGroupDialog(
+            showDialogState = showAddGroupDialogState,
+            groupNameState = newGroupNameState,
+            onSaveClick = {
+                Toast.makeText(context, "Group added", Toast.LENGTH_SHORT).show()
+                newGroupNameState.value = ""
+            }
+        )
+
         Column(modifier = Modifier
             .fillMaxSize()
         ) {
@@ -111,6 +130,7 @@ fun GroupScreen(
                 indexState = indexState,
                 onAddGroupClick = {
                     Toast.makeText(context, "Adding group", Toast.LENGTH_SHORT).show()
+                    showAddGroupDialogState.value = true
                 },
                 onDeleteGroupClick = {
                     Toast.makeText(context, "Deleting group", Toast.LENGTH_SHORT).show()

@@ -1,16 +1,11 @@
 package com.bogdan801.additionalpoints.presentation.screens.info
 
-import android.widget.Toast
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,8 +17,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.bogdan801.additionalpoints.R
 import com.bogdan801.additionalpoints.presentation.custom.composable.ActivityInformationTable
 import com.bogdan801.additionalpoints.presentation.custom.composable.CustomTopAppBar
-import com.bogdan801.additionalpoints.presentation.custom.composable.DrawerMenuItem
-import com.bogdan801.additionalpoints.presentation.custom.composable.MenuDrawer
+import com.bogdan801.additionalpoints.presentation.custom.composable.drawer.DrawerMenuItem
+import com.bogdan801.additionalpoints.presentation.custom.composable.drawer.MenuDrawer
 import kotlinx.coroutines.launch
 
 //import androidx.navigation.NavHostController

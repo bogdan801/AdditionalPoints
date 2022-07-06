@@ -70,8 +70,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             AdditionalPointsTheme {
                 Surface(modifier = Modifier.background(MaterialTheme.colors.background)) {
-                    //GroupScreen()
-                    InfoScreen()
+                    GroupScreen()
+                    //InfoScreen()
                 }
                 /*ActivityInformationTable(
                     data = activityInfoList,
