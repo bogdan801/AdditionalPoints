@@ -14,7 +14,7 @@ import com.bogdan801.additionalpoints.presentation.custom.composable.CustomButto
 import com.bogdan801.additionalpoints.presentation.custom.composable.CustomTextField
 
 @Composable
-fun CreateGroupDialog(
+fun AddGroupDialog(
     groupNameState: State<String>,
     onTextChanged: (String)->Unit = {},
     showDialogState: MutableState<Boolean>,
@@ -38,7 +38,10 @@ fun CreateGroupDialog(
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.width(8.dp))
-            CustomButton(onClick = onSaveClick) {
+            CustomButton(
+                modifier = Modifier.height(45.dp),
+                onClick = onSaveClick
+            ) {
                 Text(text = "Зберегти")
             }
         }

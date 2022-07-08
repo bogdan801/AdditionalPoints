@@ -27,6 +27,7 @@ import com.bogdan801.additionalpoints.data.excel.report.AdditionalReportInfo
 import com.bogdan801.additionalpoints.data.excel.util.createExcelURILauncher
 import com.bogdan801.additionalpoints.domain.repository.Repository
 import com.bogdan801.additionalpoints.presentation.custom.composable.CustomTextField
+import com.bogdan801.additionalpoints.presentation.navigation.Navigation
 import com.bogdan801.additionalpoints.presentation.screens.group.GroupScreen
 import com.bogdan801.additionalpoints.presentation.screens.info.InfoScreen
 import com.bogdan801.additionalpoints.presentation.theme.AdditionalPointsTheme
@@ -76,20 +77,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             AdditionalPointsTheme {
                 Surface(modifier = Modifier.background(MaterialTheme.colors.background)) {
-                    GroupScreen()
-                    //InfoScreen()
-                    /*val state = remember{
-                        mutableStateOf("")
-                    }
-
-                    CustomTextField(
-                        modifier = Modifier,
-                        value = state.value,
-                        onValueChanged = {
-                            state.value = it
-                        }
-                    )*/
-
+                    val navController = rememberNavController()
+                    Navigation(navController = navController)
                 }
                 /*ActivityInformationTable(
                     data = activityInfoList,

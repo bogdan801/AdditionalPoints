@@ -20,7 +20,8 @@ interface Repository {
     suspend fun deleteGroupStudents(groupId: Int)
     suspend fun deleteStudent(studentID: Int)
     suspend fun deleteStudentActivity(studActID: Int)
-    suspend fun deleteALLActivitiesOfAStudent(studentID: Int)
+    suspend fun deleteAllActivitiesOfAStudent(studentID: Int)
+    suspend fun deleteAllGroupActivities(groupId: Int)
 
     //delete all
     suspend fun deleteAllActivities()
@@ -34,6 +35,7 @@ interface Repository {
     fun getGroups(): Flow<List<GroupEntity>>
     suspend fun getGroupNameByID(groupId: Int): String
     fun getStudents(): Flow<List<StudentEntity>>
+    suspend fun getStudentValueSum(studentID: Int): Float
     fun getStudentsByGroup(groupID: Int) : Flow<List<StudentEntity>>
     suspend fun getStudentsByGroupAndType(groupID: Int, isContract: Int) : List<StudentEntity>
     fun getGroupWithStudentsJunction(): Flow<List<GroupWithStudentsJunction>>

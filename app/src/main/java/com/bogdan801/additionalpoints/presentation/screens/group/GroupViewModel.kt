@@ -28,9 +28,10 @@ constructor(
 
     private val _groupListState: MutableState<List<Group>> = mutableStateOf(listOf())
     val groupListState: State<List<Group>> = _groupListState
+    val selectedGroup get() = if(groupListState.value.isNotEmpty())groupListState.value[selectedGroupIndexState.value] else null
 
     private val _studentGroupStudentsList: MutableState<List<Student>> = mutableStateOf(listOf())
-    val studentGroupStudentsList: State<List<Student>> = _studentGroupStudentsList
+    val groupStudentsList: State<List<Student>> = _studentGroupStudentsList
 
     fun updateStudentsList(){
         viewModelScope.launch {
@@ -41,6 +42,8 @@ constructor(
             }
         }
     }
+
+
 
     //ADD GROUP DIALOG
     //show add dialog state
@@ -62,20 +65,23 @@ constructor(
         }
     }
 
-    val selectedGroup get() = if(groupListState.value.isNotEmpty())groupListState.value[selectedGroupIndexState.value] else null
+
+    //DELETE GROUP DIALOG
+    val showDeleteGroupDialogState = mutableStateOf(false)
 
     fun deleteSelectedGroup(){
         viewModelScope.launch {
             selectedGroup?.let {
                 repository.deleteGroup(it.groupID)
             }
-
         }
     }
 
-    fun deleteGroup(groupID: Int){
+    fun deleteSelectedGroupActivities(){
         viewModelScope.launch {
-            repository.deleteGroup(groupID)
+            selectedGroup?.let {
+                repository.deleteAllGroupActivities(it.groupID)
+            }
         }
     }
 

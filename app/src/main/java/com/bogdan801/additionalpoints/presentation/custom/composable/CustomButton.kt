@@ -12,20 +12,23 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun CustomButton(
+    modifier: Modifier = Modifier,
     onClick: () -> Unit,
     roundedCorner: Dp = 15.dp,
     isOutlined: Boolean = false,
+    enabled: Boolean = true,
     content: @Composable RowScope.() -> Unit
 ) {
     if(isOutlined){
         OutlinedButton(
-            modifier = Modifier.height(45.dp),
+            modifier = modifier,
             onClick = onClick,
             shape = RoundedCornerShape(roundedCorner),
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = MaterialTheme.colors.surface,
                 contentColor = MaterialTheme.colors.secondaryVariant
             ),
+            enabled = enabled,
             border = BorderStroke(1.dp, MaterialTheme.colors.primary)
         ) {
             content()
@@ -33,13 +36,14 @@ fun CustomButton(
     }
     else{
         Button(
-            modifier = Modifier.height(45.dp),
+            modifier = modifier,
             onClick = onClick,
             shape = RoundedCornerShape(roundedCorner),
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = MaterialTheme.colors.secondary,
                 contentColor = MaterialTheme.colors.onSecondary
-            )
+            ),
+            enabled = enabled,
         ) {
             content()
         }

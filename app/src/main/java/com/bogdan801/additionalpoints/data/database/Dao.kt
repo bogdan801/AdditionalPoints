@@ -34,11 +34,12 @@ interface Dao {
     @Query("DELETE FROM studententity WHERE studentID == :studentID")
     suspend fun deleteStudent(studentID: Int)
 
+
     @Query("DELETE FROM studentactivityentity WHERE studActID == :studActID")
     suspend fun deleteStudentActivity(studActID: Int)
 
     @Query("DELETE FROM studentactivityentity WHERE studentID == :studentID")
-    suspend fun deleteALLActivitiesOfAStudent(studentID: Int)
+    suspend fun deleteAllActivitiesOfAStudent(studentID: Int)
 
     //delete all
     @Query("DELETE FROM activityinformationentity")
@@ -76,6 +77,9 @@ interface Dao {
 
     @Query("SELECT * FROM studententity ORDER BY fullName")
     fun getStudents() : Flow<List<StudentEntity>>
+
+    @Query("SELECT SUM(value) FROM studentactivityentity WHERE studentID == :studentID")
+    suspend fun getStudentValueSum(studentID: Int): Float
 
     @Query("SELECT * FROM studententity WHERE groupID == :groupID ORDER BY fullName")
     fun getStudentsByGroup(groupID: Int) : Flow<List<StudentEntity>>

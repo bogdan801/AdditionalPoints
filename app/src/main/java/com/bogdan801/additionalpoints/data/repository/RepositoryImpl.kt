@@ -1,6 +1,5 @@
 package com.bogdan801.additionalpoints.data.repository
 
-import android.content.Context
 import com.bogdan801.additionalpoints.data.database.Dao
 import com.bogdan801.additionalpoints.data.database.entities.ActivityInformationEntity
 import com.bogdan801.additionalpoints.data.database.entities.GroupEntity
@@ -53,7 +52,7 @@ class RepositoryImpl(
     }
 
     override suspend fun deleteStudent(studentID: Int) {
-        dbDao.deleteALLActivitiesOfAStudent(studentID)
+        dbDao.deleteAllActivitiesOfAStudent(studentID)
         dbDao.deleteStudent(studentID)
     }
 
@@ -61,8 +60,15 @@ class RepositoryImpl(
         dbDao.deleteStudentActivity(studActID)
     }
 
-    override suspend fun deleteALLActivitiesOfAStudent(studentID: Int){
-        dbDao.deleteALLActivitiesOfAStudent(studentID)
+    override suspend fun deleteAllActivitiesOfAStudent(studentID: Int){
+        dbDao.deleteAllActivitiesOfAStudent(studentID)
+    }
+
+    override suspend fun deleteAllGroupActivities(groupId: Int){
+        val studentsOfAGroup = getStudentsByGroup(groupId).first()
+        studentsOfAGroup.forEach {
+            deleteAllActivitiesOfAStudent(it.studentID)
+        }
     }
 
     //delete all
@@ -92,6 +98,11 @@ class RepositoryImpl(
     override suspend fun getGroupNameByID(groupId: Int): String = dbDao.getGroupNameByID(groupId)
 
     override fun getStudents(): Flow<List<StudentEntity>> = dbDao.getStudents()
+
+    override suspend fun getStudentValueSum(studentID: Int): Float {
+        val value = dbDao.getStudentValueSum(studentID)
+        return if(value>10) 10f else value
+    }
 
     override fun getStudentsByGroup(groupID: Int) : Flow<List<StudentEntity>> = dbDao.getStudentsByGroup(groupID)
 

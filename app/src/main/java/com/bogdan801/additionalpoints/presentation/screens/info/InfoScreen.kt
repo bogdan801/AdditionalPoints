@@ -14,18 +14,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.bogdan801.additionalpoints.R
 import com.bogdan801.additionalpoints.presentation.custom.composable.ActivityInformationTable
 import com.bogdan801.additionalpoints.presentation.custom.composable.CustomTopAppBar
 import com.bogdan801.additionalpoints.presentation.custom.composable.drawer.DrawerMenuItem
 import com.bogdan801.additionalpoints.presentation.custom.composable.drawer.MenuDrawer
+import com.bogdan801.additionalpoints.presentation.navigation.Screen
 import kotlinx.coroutines.launch
-
-//import androidx.navigation.NavHostController
 
 @Composable
 fun InfoScreen(
-    //navController: NavHostController? = null,
+    navController: NavHostController,
     viewModel: InfoViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -67,6 +67,7 @@ fun InfoScreen(
                         scope.launch {
                             scaffoldState.drawerState.close()
                         }
+                        navController.popBackStack()
                     }
                 )
                 DrawerMenuItem(
@@ -76,6 +77,7 @@ fun InfoScreen(
                         scope.launch {
                             scaffoldState.drawerState.close()
                         }
+                        //navController.navigate(Screen.ReportScreen.route)
                     }
                 )
                 DrawerMenuItem(
