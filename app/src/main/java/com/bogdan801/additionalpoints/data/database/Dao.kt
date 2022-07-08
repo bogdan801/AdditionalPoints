@@ -28,11 +28,17 @@ interface Dao {
     @Query("DELETE FROM groupentity WHERE groupID == :groupId")
     suspend fun deleteGroup(groupId: Int)
 
+    @Query("DELETE FROM studententity WHERE groupID == :groupId")
+    suspend fun deleteGroupStudents(groupId: Int)
+
     @Query("DELETE FROM studententity WHERE studentID == :studentID")
     suspend fun deleteStudent(studentID: Int)
 
     @Query("DELETE FROM studentactivityentity WHERE studActID == :studActID")
     suspend fun deleteStudentActivity(studActID: Int)
+
+    @Query("DELETE FROM studentactivityentity WHERE studentID == :studentID")
+    suspend fun deleteALLActivitiesOfAStudent(studentID: Int)
 
     //delete all
     @Query("DELETE FROM activityinformationentity")

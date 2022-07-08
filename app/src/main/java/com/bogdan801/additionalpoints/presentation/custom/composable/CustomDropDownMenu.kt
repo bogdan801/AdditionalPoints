@@ -33,9 +33,7 @@ fun CustomDropDownMenu(
     else
         Icons.Filled.KeyboardArrowDown
 
-    if(data.isEmpty() && indexState.value!=-1){
-        indexState.value = -1
-    }
+    if(indexState.value !in 0..data.lastIndex) indexState.value = data.lastIndex
 
     Column {
         Box(

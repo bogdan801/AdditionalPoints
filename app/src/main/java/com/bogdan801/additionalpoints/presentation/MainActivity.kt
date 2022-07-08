@@ -7,12 +7,17 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.bogdan801.additionalpoints.R
 import com.bogdan801.additionalpoints.data.database.entities.GroupEntity
@@ -21,6 +26,7 @@ import com.bogdan801.additionalpoints.data.database.entities.StudentEntity
 import com.bogdan801.additionalpoints.data.excel.report.AdditionalReportInfo
 import com.bogdan801.additionalpoints.data.excel.util.createExcelURILauncher
 import com.bogdan801.additionalpoints.domain.repository.Repository
+import com.bogdan801.additionalpoints.presentation.custom.composable.CustomTextField
 import com.bogdan801.additionalpoints.presentation.screens.group.GroupScreen
 import com.bogdan801.additionalpoints.presentation.screens.info.InfoScreen
 import com.bogdan801.additionalpoints.presentation.theme.AdditionalPointsTheme
@@ -72,6 +78,18 @@ class MainActivity : ComponentActivity() {
                 Surface(modifier = Modifier.background(MaterialTheme.colors.background)) {
                     GroupScreen()
                     //InfoScreen()
+                    /*val state = remember{
+                        mutableStateOf("")
+                    }
+
+                    CustomTextField(
+                        modifier = Modifier,
+                        value = state.value,
+                        onValueChanged = {
+                            state.value = it
+                        }
+                    )*/
+
                 }
                 /*ActivityInformationTable(
                     data = activityInfoList,

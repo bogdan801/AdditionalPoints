@@ -17,8 +17,10 @@ interface Repository {
     //delete
     suspend fun deleteActivity(activityID: Int)
     suspend fun deleteGroup(groupId: Int)
+    suspend fun deleteGroupStudents(groupId: Int)
     suspend fun deleteStudent(studentID: Int)
     suspend fun deleteStudentActivity(studActID: Int)
+    suspend fun deleteALLActivitiesOfAStudent(studentID: Int)
 
     //delete all
     suspend fun deleteAllActivities()

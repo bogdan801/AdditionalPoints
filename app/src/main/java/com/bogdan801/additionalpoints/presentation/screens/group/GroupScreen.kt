@@ -17,13 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 //import androidx.hilt.navigation.compose.hiltViewModel
 //import androidx.navigation.NavHostController
 import com.bogdan801.additionalpoints.presentation.theme.AdditionalPointsTheme
 import kotlinx.coroutines.launch
 import com.bogdan801.additionalpoints.R
 import com.bogdan801.additionalpoints.presentation.custom.composable.*
-import com.bogdan801.additionalpoints.presentation.custom.composable.dialogbox.BasicDialogBox
 import com.bogdan801.additionalpoints.presentation.custom.composable.dialogbox.CreateGroupDialog
 import com.bogdan801.additionalpoints.presentation.custom.composable.drawer.DrawerMenuItem
 import com.bogdan801.additionalpoints.presentation.custom.composable.drawer.MenuDrawer
@@ -31,7 +31,7 @@ import com.bogdan801.additionalpoints.presentation.custom.composable.drawer.Menu
 @Composable
 fun GroupScreen(
     //navController: NavHostController? = null,
-    //viewModel: GroupViewModel = hiltViewModel()
+    viewModel: GroupViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -39,6 +39,7 @@ fun GroupScreen(
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
+            //top app bar
             CustomTopAppBar(
                 iconButton = {
                     IconButton(
@@ -61,6 +62,7 @@ fun GroupScreen(
             )
         },
         drawerContent = {
+            //side drawer
             MenuDrawer(
                 headerIconPainter = painterResource(id = R.drawable.ic_nubip_foreground),
                 headerTitle = "НУБІП. Додаткові бали"
@@ -97,43 +99,41 @@ fun GroupScreen(
         }
 
     ) {
-
-        val showAddGroupDialogState = remember {
-            mutableStateOf(false)
-        }
-
-        val newGroupNameState = remember {
-            mutableStateOf("")
-        }
-
+        //add group dialog box
         CreateGroupDialog(
-            showDialogState = showAddGroupDialogState,
-            groupNameState = newGroupNameState,
+            showDialogState = viewModel.showAddGroupDialogState,
+            groupNameState = viewModel.newGroupNameState,
+            onTextChanged = {
+                viewModel.onGroupNameChanged(it)
+            },
             onSaveClick = {
-                Toast.makeText(context, "Group added", Toast.LENGTH_SHORT).show()
-                newGroupNameState.value = ""
+                if(viewModel.newGroupNameState.value.isNotBlank()){
+                    viewModel.addNewGroup()
+                    Toast.makeText(context, "Групу додано", Toast.LENGTH_SHORT).show()
+                }
+                else{
+                    Toast.makeText(context, "Назва групи не може бути порожньою", Toast.LENGTH_SHORT).show()
+                }
             }
         )
 
+        //contents of the screen
         Column(modifier = Modifier
             .fillMaxSize()
         ) {
-            val indexState = remember {
-                mutableStateOf(0)
-            }
-
             GroupSelector(
-                data = listOf("КН19001б", "КН19002б"),
+                data = viewModel.groupListState.value.map { it.name },
                 onGroupSelected = { _, text ->
-                    Toast.makeText(context, "${indexState.value} - $text", Toast.LENGTH_SHORT).show()
+                    viewModel.updateStudentsList()
+                    Toast.makeText(context, "${viewModel.selectedGroupIndexState.value} - $text", Toast.LENGTH_SHORT).show()
                 },
-                indexState = indexState,
+                indexState = viewModel.selectedGroupIndexState,
                 onAddGroupClick = {
-                    Toast.makeText(context, "Adding group", Toast.LENGTH_SHORT).show()
-                    showAddGroupDialogState.value = true
+                    viewModel.showAddGroupDialogState.value = true
                 },
                 onDeleteGroupClick = {
-                    Toast.makeText(context, "Deleting group", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "${viewModel.groupListState.value[viewModel.selectedGroupIndexState.value].name} was deleted", Toast.LENGTH_SHORT).show()
+                    viewModel.deleteSelectedGroup()
                 },
                 showButtons = true
             )

@@ -12,6 +12,7 @@ import com.bogdan801.additionalpoints.data.excel.report.AdditionalReportInfo
 import com.bogdan801.additionalpoints.data.excel.report.generateReport
 import com.bogdan801.additionalpoints.domain.repository.Repository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
 class RepositoryImpl(
@@ -40,15 +41,28 @@ class RepositoryImpl(
 
     //delete
     override suspend fun deleteGroup(groupId: Int) {
+        deleteGroupStudents(groupId)
         dbDao.deleteGroup(groupId)
     }
 
+    override suspend fun deleteGroupStudents(groupId: Int){
+        val studentsOfAGroup = getStudentsByGroup(groupId).first()
+        studentsOfAGroup.forEach {
+            deleteStudent(it.studentID)
+        }
+    }
+
     override suspend fun deleteStudent(studentID: Int) {
+        dbDao.deleteALLActivitiesOfAStudent(studentID)
         dbDao.deleteStudent(studentID)
     }
 
     override suspend fun deleteStudentActivity(studActID: Int) {
         dbDao.deleteStudentActivity(studActID)
+    }
+
+    override suspend fun deleteALLActivitiesOfAStudent(studentID: Int){
+        dbDao.deleteALLActivitiesOfAStudent(studentID)
     }
 
     //delete all
