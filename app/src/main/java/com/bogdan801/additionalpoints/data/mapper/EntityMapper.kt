@@ -23,7 +23,13 @@ fun ActivityInformation.toActivityInformationEntity(): ActivityInformationEntity
 fun GroupEntity.toGroup(): Group = Group(groupID = groupID, name = name)
 fun Group.toGroupEntity(): GroupEntity = GroupEntity(groupID = groupID, name = name)
 
-fun StudentEntity.toStudent(): Student = Student(studentID=studentID, groupID = groupID, fullName=fullName, isContract=isContract)
+fun StudentEntity.toStudent(): Student = Student(studentID=studentID, groupID = groupID, fullName=fullName, isContract=isContract, valueSum = "")
+
+suspend fun StudentEntity.toStudent(repository: Repository): Student {
+    val valueSum = repository.getStudentValueSum(studentID)
+    return Student(studentID=studentID, groupID = groupID, fullName=fullName, isContract=isContract, valueSum = String.format("%.2f", valueSum))
+}
+
 fun Student.toStudentEntity(): StudentEntity = StudentEntity(studentID=studentID, groupID = groupID, fullName=fullName, isContract=isContract)
 
 suspend fun StudentActivityEntity.toStudentActivity(repository: Repository): StudentActivity = StudentActivity(

@@ -26,7 +26,7 @@ val Typography = Typography(
     h2 = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
-        fontSize = 26.sp
+        fontSize = 22.sp
     ),
     h3 = TextStyle(
         fontFamily = FontFamily.Default,

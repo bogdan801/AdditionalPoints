@@ -74,6 +74,15 @@ class MainActivity : ComponentActivity() {
             Toast.makeText(this, "Workbook has been saved", Toast.LENGTH_LONG).show()
         }*/
 
+        /*runBlocking {
+            repository.insertStudentActivity(StudentActivityEntity(0, 4, 86, "інстаграм вікторина «Новорічна вікторина»", "28.12.2021", 0.6f))
+            repository.insertStudentActivity(StudentActivityEntity(0, 4, 86, "інстаграм вікторина «Новорічна домівка»", "29.12.2021", 1f))
+            repository.insertStudentActivity(StudentActivityEntity(0, 5, 86, "інстаграм вікторина «Новорічна вікторина»", "31.12.2021", 0.8f))
+            repository.insertStudentActivity(StudentActivityEntity(0, 6, 86, "інстаграм вікторина «Новорічна вікторина»", "28.12.2021", 0.8f))
+            repository.insertStudentActivity(StudentActivityEntity(0, 4, 86, "інстаграм вікторина «Вгадай серіал»", "29.01.2022", 1f))
+            repository.insertStudentActivity(StudentActivityEntity(0, 5, 86, "інстаграм вікторина «Вгадай серіал»", "31.01.2022", 1f))
+        }*/
+
         setContent {
             AdditionalPointsTheme {
                 Surface(modifier = Modifier.background(MaterialTheme.colors.background)) {

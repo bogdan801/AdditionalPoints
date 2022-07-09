@@ -101,7 +101,9 @@ class RepositoryImpl(
 
     override suspend fun getStudentValueSum(studentID: Int): Float {
         val value = dbDao.getStudentValueSum(studentID)
-        return if(value>10) 10f else value
+        return if(value!=null){
+            if(value>10) 10f else value
+        } else 0f
     }
 
     override fun getStudentsByGroup(groupID: Int) : Flow<List<StudentEntity>> = dbDao.getStudentsByGroup(groupID)

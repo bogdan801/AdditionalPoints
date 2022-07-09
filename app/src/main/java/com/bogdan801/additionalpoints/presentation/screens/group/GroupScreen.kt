@@ -2,32 +2,31 @@ package com.bogdan801.additionalpoints.presentation.screens.group
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.movableContentOf
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 //import androidx.hilt.navigation.compose.hiltViewModel
 //import androidx.navigation.NavHostController
-import com.bogdan801.additionalpoints.presentation.theme.AdditionalPointsTheme
 import kotlinx.coroutines.launch
 import com.bogdan801.additionalpoints.R
 import com.bogdan801.additionalpoints.presentation.custom.composable.*
 import com.bogdan801.additionalpoints.presentation.custom.composable.dialogbox.AddGroupDialog
+import com.bogdan801.additionalpoints.presentation.custom.composable.dialogbox.AddStudentDialog
 import com.bogdan801.additionalpoints.presentation.custom.composable.dialogbox.DeleteGroupDialog
 import com.bogdan801.additionalpoints.presentation.custom.composable.drawer.DrawerMenuItem
 import com.bogdan801.additionalpoints.presentation.custom.composable.drawer.MenuDrawer
@@ -112,11 +111,14 @@ fun GroupScreen(
                     backgroundColor = MaterialTheme.colors.secondary,
                     contentColor = MaterialTheme.colors.onSecondary,
                     onClick = {
-
+                        viewModel.onStudentNameChanged("")
+                        viewModel.showAddStudentDialogState.value = true
                     }
                 ) {
                     Icon(
-                        modifier = Modifier.size(40.dp).offset(y = 2.dp),
+                        modifier = Modifier
+                            .size(40.dp)
+                            .offset(y = 2.dp),
                         imageVector = Icons.Default.Add,
                         contentDescription = null
                     )
@@ -139,7 +141,7 @@ fun GroupScreen(
                     Toast.makeText(context, "Групу додано", Toast.LENGTH_SHORT).show()
                 }
                 else{
-                    Toast.makeText(context, "Назва групи не може бути порожньою", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Назва групи не може бути порожньою!", Toast.LENGTH_SHORT).show()
                 }
             }
         )
@@ -148,16 +150,32 @@ fun GroupScreen(
         DeleteGroupDialog(
             showDialogState = viewModel.showDeleteGroupDialogState,
             onDeleteGroupClick = {
-                Toast.makeText(context, "Групу ${viewModel.selectedGroup?.name} видалено", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Групу ${viewModel.selectedGroup.name} видалено", Toast.LENGTH_SHORT).show()
                 viewModel.deleteSelectedGroup()
             },
             onDeleteGroupActivitiesClick = {
                 viewModel.deleteSelectedGroupActivities()
-                Toast.makeText(context, "Всі бали групи ${viewModel.selectedGroup?.name} видалено", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Всі бали групи ${viewModel.selectedGroup.name} видалено", Toast.LENGTH_SHORT).show()
             }
         )
 
         //add student dialog box
+        AddStudentDialog(
+            showDialogState = viewModel.showAddStudentDialogState,
+            newStudentName = viewModel.newStudentNameState.value,
+            onNameChanged = {
+                viewModel.onStudentNameChanged(it)
+            },
+            isContractState = viewModel.isNewStudentContract,
+            onSaveNewStudentClick = {
+                if(viewModel.newStudentNameState.value.isNotBlank()){
+                    viewModel.onSaveNewStudentClick()
+                }
+                else{
+                    Toast.makeText(context, "ПІБ студента не може бути порожнім!", Toast.LENGTH_SHORT).show()
+                }
+            }
+        )
 
         //contents of the screen
         Column(modifier = Modifier
@@ -165,9 +183,8 @@ fun GroupScreen(
         ) {
             GroupSelector(
                 data = viewModel.groupListState.value.map { it.name },
-                onGroupSelected = { _, text ->
+                onGroupSelected = { _, _ ->
                     viewModel.updateStudentsList()
-                    Toast.makeText(context, "${viewModel.selectedGroupIndexState.value} - $text", Toast.LENGTH_SHORT).show()
                 },
                 indexState = viewModel.selectedGroupIndexState,
                 onAddGroupClick = {
@@ -179,16 +196,36 @@ fun GroupScreen(
                 showButtons = true
             )
             Box(modifier = Modifier.fillMaxSize()){
-                if(viewModel.groupListState.value.isEmpty()){
-                    Text(
-                        modifier = Modifier.align(Alignment.Center),
-                        text = "Створіть групу",
-                        color = MaterialTheme.colors.secondaryVariant,
-                        textAlign = TextAlign.Center
-                    )
-                }
-                else{
-                    if(viewModel.groupStudentsList.value.isEmpty()){
+                if(viewModel.groupListState.value.isNotEmpty()){
+                    if(viewModel.groupStudentsList.value.isNotEmpty()){
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .verticalScroll(rememberScrollState())
+                        ) {
+                            if(viewModel.budgetStudentsList.value.isNotEmpty()){
+                                Text(modifier = Modifier.padding(8.dp), text = "БЮДЖЕТ")
+                                viewModel.budgetStudentsList.value.forEach { student ->
+                                    StudentCard(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        studentFullName = student.fullName,
+                                        value = student.valueSum
+                                    )
+                                }
+                            }
+                            if(viewModel.contractStudentsList.value.isNotEmpty()){
+                                Text(modifier = Modifier.padding(8.dp), text = "КОНТРАКТ")
+                                viewModel.contractStudentsList.value.forEach{ student ->
+                                    StudentCard(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        studentFullName = student.fullName,
+                                        value = student.valueSum
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    else{
                         Text(
                             modifier = Modifier.align(Alignment.Center),
                             text = "Додайте студентів",
@@ -196,9 +233,18 @@ fun GroupScreen(
                             textAlign = TextAlign.Center
                         )
                     }
+                    Button(onClick = { Toast.makeText(context, viewModel.groupStudentsList.value[0].fullName, Toast.LENGTH_SHORT).show() }) {
+                        Text(text = "puk")
+                    }
                 }
-
-
+                else{
+                    Text(
+                        modifier = Modifier.align(Alignment.Center),
+                        text = "Створіть групу",
+                        color = MaterialTheme.colors.secondaryVariant,
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
         }
     }

@@ -3,17 +3,16 @@ package com.bogdan801.additionalpoints.presentation.screens.group
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bogdan801.additionalpoints.data.mapper.toGroup
 import com.bogdan801.additionalpoints.data.mapper.toGroupEntity
 import com.bogdan801.additionalpoints.data.mapper.toStudent
+import com.bogdan801.additionalpoints.data.mapper.toStudentEntity
 import com.bogdan801.additionalpoints.domain.model.Group
 import com.bogdan801.additionalpoints.domain.model.Student
 import com.bogdan801.additionalpoints.domain.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,17 +27,27 @@ constructor(
 
     private val _groupListState: MutableState<List<Group>> = mutableStateOf(listOf())
     val groupListState: State<List<Group>> = _groupListState
-    val selectedGroup get() = if(groupListState.value.isNotEmpty())groupListState.value[selectedGroupIndexState.value] else null
+    val selectedGroup get() = groupListState.value[selectedGroupIndexState.value]
 
-    private val _studentGroupStudentsList: MutableState<List<Student>> = mutableStateOf(listOf())
-    val groupStudentsList: State<List<Student>> = _studentGroupStudentsList
+    private val _groupStudentsList: MutableState<List<Student>> = mutableStateOf(listOf())
+    val groupStudentsList: State<List<Student>> = _groupStudentsList
+
+    private val _budgetStudentsList: MutableState<List<Student>> = mutableStateOf(listOf())
+    val budgetStudentsList: State<List<Student>> = _budgetStudentsList
+
+    private val _contractStudentsList: MutableState<List<Student>> = mutableStateOf(listOf())
+    val contractStudentsList: State<List<Student>> = _contractStudentsList
 
     fun updateStudentsList(){
+        if(selectedGroup.groupID == groupListState.value[0].groupID)
+            println()
+
+        if (selectedGroupIndexState.value >= groupListState.value.size) selectedGroupIndexState.value = groupListState.value.lastIndex
         viewModelScope.launch {
-            selectedGroup?.let { group ->
-                repository.getStudentsByGroup(group.groupID).collect{ studentEntitiesList ->
-                    _studentGroupStudentsList.value = studentEntitiesList.map { it.toStudent() }
-                }
+            repository.getStudentsByGroup(selectedGroup.groupID).collect{ studentEntitiesList ->
+                _groupStudentsList.value = studentEntitiesList.map { it.toStudent(repository) }
+                _budgetStudentsList.value = _groupStudentsList.value.filter { !it.isContract }
+                _contractStudentsList.value = _groupStudentsList.value.filter { it.isContract }
             }
         }
     }
@@ -71,25 +80,54 @@ constructor(
 
     fun deleteSelectedGroup(){
         viewModelScope.launch {
-            selectedGroup?.let {
-                repository.deleteGroup(it.groupID)
-            }
+            repository.deleteGroup(selectedGroup.groupID)
         }
     }
 
     fun deleteSelectedGroupActivities(){
         viewModelScope.launch {
-            selectedGroup?.let {
-                repository.deleteAllGroupActivities(it.groupID)
-            }
+            repository.deleteAllGroupActivities(selectedGroup.groupID)
         }
     }
 
+    //ADD STUDENT DIALOG
+    val showAddStudentDialogState = mutableStateOf(false)
+
+    private val _newStudentNameState = mutableStateOf("")
+    val newStudentNameState: State<String> = _newStudentNameState
+
+    val isNewStudentContract = mutableStateOf(false)
+
+    fun onStudentNameChanged(newStudentName: String){
+        _newStudentNameState.value = newStudentName
+    }
+
+    fun onSaveNewStudentClick(){
+        viewModelScope.launch {
+            repository.insertStudent(
+                Student(
+                    studentID = 0,
+                    groupID = selectedGroup.groupID,
+                    fullName = newStudentNameState.value,
+                    isContract = isNewStudentContract.value
+                ).toStudentEntity()
+            )
+            isNewStudentContract.value = false
+            showAddStudentDialogState.value = false
+            updateStudentsList()
+        }
+    }
 
     init {
         viewModelScope.launch {
             repository.getGroups().collect { list ->
+                val size = _groupListState.value.size
                 _groupListState.value = list.map { it.toGroup() }
+                if (_groupListState.value.isNotEmpty()){
+                    if(size != 0 && size<_groupListState.value.size) selectedGroupIndexState.value = _groupListState.value.lastIndex
+                    updateStudentsList()
+                }
+
             }
         }
     }

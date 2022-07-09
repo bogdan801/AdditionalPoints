@@ -28,7 +28,6 @@ fun InfoScreen(
     navController: NavHostController,
     viewModel: InfoViewModel = hiltViewModel()
 ) {
-    val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
     Scaffold(
