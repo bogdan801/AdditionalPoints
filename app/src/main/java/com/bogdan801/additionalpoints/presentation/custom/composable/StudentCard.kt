@@ -2,6 +2,7 @@ package com.bogdan801.additionalpoints.presentation.custom.composable
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -23,6 +24,7 @@ fun StudentCard(
     modifier: Modifier = Modifier,
     studentFullName: String = "",
     value: String = "",
+    onCardClick: () -> Unit = {},
     shape: Shape = MaterialTheme.shapes.large,
     backgroundColor: Color = MaterialTheme.colors.surface,
     contentColor: Color = MaterialTheme.colors.secondaryVariant,
@@ -30,7 +32,7 @@ fun StudentCard(
     elevation: Dp = 0.dp,
 ) {
     Card(
-        modifier = modifier.padding(bottom = 1.dp),
+        modifier = modifier.padding(bottom = 1.dp).clickable(onClick = onCardClick),
         shape = shape,
         backgroundColor = backgroundColor,
         contentColor = contentColor,

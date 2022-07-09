@@ -82,7 +82,7 @@ interface Dao {
     suspend fun getStudentValueSum(studentID: Int): Float?
 
     @Query("SELECT * FROM studententity WHERE groupID == :groupID ORDER BY fullName")
-    fun getStudentsByGroup(groupID: Int) : Flow<List<StudentEntity>>
+    suspend fun getStudentsByGroup(groupID: Int) : List<StudentEntity>
 
     @Query("SELECT * FROM studententity WHERE groupID == :groupID AND isContract == :isContract ORDER BY fullName")
     suspend fun getStudentsByGroupAndType(groupID: Int, isContract: Int) : List<StudentEntity>

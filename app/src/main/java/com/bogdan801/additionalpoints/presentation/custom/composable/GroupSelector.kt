@@ -19,7 +19,7 @@ import com.bogdan801.additionalpoints.presentation.theme.AdditionalPointsTheme
 @Composable
 fun GroupSelector(
     data: List<String> = listOf(),
-    indexState: MutableState<Int> = remember{mutableStateOf(0)},
+    index: Int = 0,
     onAddGroupClick: () -> Unit = {},
     onDeleteGroupClick: () -> Unit = {},
     onGroupSelected: (index: Int, text: String) -> Unit = { _: Int, _: String -> },
@@ -44,7 +44,7 @@ fun GroupSelector(
                 CustomDropDownMenu(
                     data = data,
                     onItemSelected = onGroupSelected,
-                    indexState = indexState
+                    index = index,
                 )
             }
 

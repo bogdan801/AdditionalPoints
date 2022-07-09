@@ -45,7 +45,7 @@ class RepositoryImpl(
     }
 
     override suspend fun deleteGroupStudents(groupId: Int){
-        val studentsOfAGroup = getStudentsByGroup(groupId).first()
+        val studentsOfAGroup = getStudentsByGroup(groupId)
         studentsOfAGroup.forEach {
             deleteStudent(it.studentID)
         }
@@ -65,7 +65,7 @@ class RepositoryImpl(
     }
 
     override suspend fun deleteAllGroupActivities(groupId: Int){
-        val studentsOfAGroup = getStudentsByGroup(groupId).first()
+        val studentsOfAGroup = getStudentsByGroup(groupId)
         studentsOfAGroup.forEach {
             deleteAllActivitiesOfAStudent(it.studentID)
         }
@@ -106,7 +106,7 @@ class RepositoryImpl(
         } else 0f
     }
 
-    override fun getStudentsByGroup(groupID: Int) : Flow<List<StudentEntity>> = dbDao.getStudentsByGroup(groupID)
+    override suspend fun getStudentsByGroup(groupID: Int) : List<StudentEntity> = dbDao.getStudentsByGroup(groupID)
 
     override suspend fun getStudentsByGroupAndType(groupID: Int, isContract: Int) : List<StudentEntity> = dbDao.getStudentsByGroupAndType(groupID, isContract)
 

@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.toSize
 @Composable
 fun CustomDropDownMenu(
     data: List<String> = listOf(),
-    indexState: MutableState<Int> = remember{mutableStateOf(0)},
+    index: Int = 0,
     onItemSelected: (index: Int, text: String) -> Unit = { _: Int, _: String -> }
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -32,8 +32,6 @@ fun CustomDropDownMenu(
         Icons.Filled.KeyboardArrowUp
     else
         Icons.Filled.KeyboardArrowDown
-
-    if(indexState.value !in 0..data.lastIndex && data.isNotEmpty()) indexState.value = data.lastIndex
 
     Column {
         Box(
@@ -57,7 +55,7 @@ fun CustomDropDownMenu(
                 modifier = Modifier
                     .align(Alignment.CenterStart)
                     .padding(start = 8.dp),
-                text = if(data.isEmpty()) "Груп ще не додано" else data[indexState.value],
+                text = if(data.isEmpty()) "Груп ще не додано" else data[index],
                 style = MaterialTheme.typography.h4
             )
             if(data.isNotEmpty()){
@@ -79,7 +77,6 @@ fun CustomDropDownMenu(
                 DropdownMenuItem(
                     onClick = {
                         expanded = false
-                        indexState.value = index
                         onItemSelected(index, text)
                     }
                 ) {

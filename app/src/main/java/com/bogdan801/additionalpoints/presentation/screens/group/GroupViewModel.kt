@@ -23,7 +23,8 @@ constructor(
     private val repository: Repository
 ): ViewModel() {
     //DATA
-    val selectedGroupIndexState =  mutableStateOf(0)
+    private val _selectedGroupIndexState =  mutableStateOf(0)
+    val selectedGroupIndexState: State<Int> =  _selectedGroupIndexState
 
     private val _groupListState: MutableState<List<Group>> = mutableStateOf(listOf())
     val groupListState: State<List<Group>> = _groupListState
@@ -38,13 +39,10 @@ constructor(
     private val _contractStudentsList: MutableState<List<Student>> = mutableStateOf(listOf())
     val contractStudentsList: State<List<Student>> = _contractStudentsList
 
-    fun updateStudentsList(){
-        if(selectedGroup.groupID == groupListState.value[0].groupID)
-            println()
-
-        if (selectedGroupIndexState.value >= groupListState.value.size) selectedGroupIndexState.value = groupListState.value.lastIndex
+    private fun updateStudentsList(){
+        if (selectedGroupIndexState.value >= groupListState.value.size) _selectedGroupIndexState.value = groupListState.value.lastIndex
         viewModelScope.launch {
-            repository.getStudentsByGroup(selectedGroup.groupID).collect{ studentEntitiesList ->
+            repository.getStudentsByGroup(selectedGroup.groupID).let{ studentEntitiesList ->
                 _groupStudentsList.value = studentEntitiesList.map { it.toStudent(repository) }
                 _budgetStudentsList.value = _groupStudentsList.value.filter { !it.isContract }
                 _contractStudentsList.value = _groupStudentsList.value.filter { it.isContract }
@@ -52,6 +50,10 @@ constructor(
         }
     }
 
+    fun selectNewGroup(index: Int){
+        _selectedGroupIndexState.value = index
+        updateStudentsList()
+    }
 
 
     //ADD GROUP DIALOG
@@ -114,7 +116,7 @@ constructor(
             )
             isNewStudentContract.value = false
             showAddStudentDialogState.value = false
-            updateStudentsList()
+            selectNewGroup(_selectedGroupIndexState.value)
         }
     }
 
@@ -124,8 +126,8 @@ constructor(
                 val size = _groupListState.value.size
                 _groupListState.value = list.map { it.toGroup() }
                 if (_groupListState.value.isNotEmpty()){
-                    if(size != 0 && size<_groupListState.value.size) selectedGroupIndexState.value = _groupListState.value.lastIndex
-                    updateStudentsList()
+                    if(size != 0 && size<_groupListState.value.size) selectNewGroup(_groupListState.value.lastIndex)
+                    else selectNewGroup(_selectedGroupIndexState.value)
                 }
 
             }

@@ -183,10 +183,10 @@ fun GroupScreen(
         ) {
             GroupSelector(
                 data = viewModel.groupListState.value.map { it.name },
-                onGroupSelected = { _, _ ->
-                    viewModel.updateStudentsList()
+                onGroupSelected = { index, _ ->
+                    viewModel.selectNewGroup(index)
                 },
-                indexState = viewModel.selectedGroupIndexState,
+                index = viewModel.selectedGroupIndexState.value,
                 onAddGroupClick = {
                     viewModel.showAddGroupDialogState.value = true
                 },
@@ -209,7 +209,10 @@ fun GroupScreen(
                                     StudentCard(
                                         modifier = Modifier.fillMaxWidth(),
                                         studentFullName = student.fullName,
-                                        value = student.valueSum
+                                        value = student.valueSum,
+                                        onCardClick = {
+                                            navController.navigate(Screen.StudentScreen.withArgs("${student.studentID}"))
+                                        }
                                     )
                                 }
                             }
@@ -219,7 +222,10 @@ fun GroupScreen(
                                     StudentCard(
                                         modifier = Modifier.fillMaxWidth(),
                                         studentFullName = student.fullName,
-                                        value = student.valueSum
+                                        value = student.valueSum,
+                                        onCardClick = {
+                                            navController.navigate(Screen.StudentScreen.withArgs("${student.studentID}"))
+                                        }
                                     )
                                 }
                             }
@@ -232,9 +238,6 @@ fun GroupScreen(
                             color = MaterialTheme.colors.secondaryVariant,
                             textAlign = TextAlign.Center
                         )
-                    }
-                    Button(onClick = { Toast.makeText(context, viewModel.groupStudentsList.value[0].fullName, Toast.LENGTH_SHORT).show() }) {
-                        Text(text = "puk")
                     }
                 }
                 else{

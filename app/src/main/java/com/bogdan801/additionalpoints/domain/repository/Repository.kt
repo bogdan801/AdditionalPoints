@@ -36,7 +36,7 @@ interface Repository {
     suspend fun getGroupNameByID(groupId: Int): String
     fun getStudents(): Flow<List<StudentEntity>>
     suspend fun getStudentValueSum(studentID: Int): Float
-    fun getStudentsByGroup(groupID: Int) : Flow<List<StudentEntity>>
+    suspend fun getStudentsByGroup(groupID: Int) : List<StudentEntity>
     suspend fun getStudentsByGroupAndType(groupID: Int, isContract: Int) : List<StudentEntity>
     fun getGroupWithStudentsJunction(): Flow<List<GroupWithStudentsJunction>>
     suspend fun getGroupWithStudentsJunctionByID(groupID: Int): GroupWithStudentsJunction
