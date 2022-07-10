@@ -20,6 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
 //import androidx.hilt.navigation.compose.hiltViewModel
 //import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
@@ -197,7 +198,7 @@ fun GroupScreen(
             )
             Box(modifier = Modifier.fillMaxSize()){
                 if(viewModel.groupListState.value.isNotEmpty()){
-                    if(viewModel.groupStudentsList.value.isNotEmpty()){
+                    if(viewModel.budgetStudentsList.value.isNotEmpty() || viewModel.contractStudentsList.value.isNotEmpty()){
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -224,7 +225,8 @@ fun GroupScreen(
                                         studentFullName = student.fullName,
                                         value = student.valueSum,
                                         onCardClick = {
-                                            navController.navigate(Screen.StudentScreen.withArgs("${student.studentID}"))
+
+                                            navController.navigate(route = Screen.StudentScreen.withArgs("${student.studentID}"))
                                         }
                                     )
                                 }

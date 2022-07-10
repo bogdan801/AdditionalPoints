@@ -45,9 +45,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        /*lateinit var activityInfoList: List<ActivityInformation>
-        runBlocking {
-            activityInfoList = repository.getAllActivities().first().map { it.toActivityInformation() }
+        /*runBlocking {
 
             repository.insertGroup(GroupEntity(0, "КН19001б"))
             repository.insertGroup(GroupEntity(0, "КН19002б"))
@@ -55,16 +53,14 @@ class MainActivity : ComponentActivity() {
             repository.insertStudent(StudentEntity(0, 1, "Пахалюк Катерина Дмитрівна", false))
             repository.insertStudent(StudentEntity(0, 1, "Григурко Данило Батькович", true))
             repository.insertStudent(StudentEntity(0, 2, "Дарійчук Юрій Батькович", false))
-
             repository.insertStudentActivity(StudentActivityEntity(0, 1, 86, "інстаграм вікторина «Новорічна вікторина»", "28.12.2021", 0.6f))
             repository.insertStudentActivity(StudentActivityEntity(0, 1, 86, "інстаграм вікторина «Новорічна домівка»", "29.12.2021", 1f))
             repository.insertStudentActivity(StudentActivityEntity(0, 2, 86, "інстаграм вікторина «Новорічна вікторина»", "31.12.2021", 0.8f))
             repository.insertStudentActivity(StudentActivityEntity(0, 3, 86, "інстаграм вікторина «Новорічна вікторина»", "28.12.2021", 0.8f))
             repository.insertStudentActivity(StudentActivityEntity(0, 1, 86, "інстаграм вікторина «Вгадай серіал»", "29.01.2022", 1f))
             repository.insertStudentActivity(StudentActivityEntity(0, 2, 86, "інстаграм вікторина «Вгадай серіал»", "31.01.2022", 1f))
-        }
-
-        val launcher = createExcelURILauncher(this){
+        }*/
+        /*val launcher = createExcelURILauncher(this){
             lateinit var workbook: XSSFWorkbook
             runBlocking{
                 workbook = repository.generateReportWorkbook(listOf("12.2021", "01.2022"), 1, AdditionalReportInfo("3", "ФІТ", "Григурко Д. Б.", "Лізка"))
@@ -75,12 +71,12 @@ class MainActivity : ComponentActivity() {
         }*/
 
         /*runBlocking {
-            repository.insertStudentActivity(StudentActivityEntity(0, 4, 86, "інстаграм вікторина «Новорічна вікторина»", "28.12.2021", 0.6f))
-            repository.insertStudentActivity(StudentActivityEntity(0, 4, 86, "інстаграм вікторина «Новорічна домівка»", "29.12.2021", 1f))
-            repository.insertStudentActivity(StudentActivityEntity(0, 5, 86, "інстаграм вікторина «Новорічна вікторина»", "31.12.2021", 0.8f))
-            repository.insertStudentActivity(StudentActivityEntity(0, 6, 86, "інстаграм вікторина «Новорічна вікторина»", "28.12.2021", 0.8f))
-            repository.insertStudentActivity(StudentActivityEntity(0, 4, 86, "інстаграм вікторина «Вгадай серіал»", "29.01.2022", 1f))
-            repository.insertStudentActivity(StudentActivityEntity(0, 5, 86, "інстаграм вікторина «Вгадай серіал»", "31.01.2022", 1f))
+            repository.insertStudentActivity(StudentActivityEntity(0, 13, 86, "Інстаграм вікторина «Новорічна вікторина»", "28.12.2021", 0.6f))
+            repository.insertStudentActivity(StudentActivityEntity(0, 13, 86, "Інстаграм вікторина «Новорічна домівка»", "29.12.2021", 1f))
+            repository.insertStudentActivity(StudentActivityEntity(0, 14, 86, "Інстаграм вікторина «Новорічна вікторина»", "31.12.2021", 0.8f))
+            repository.insertStudentActivity(StudentActivityEntity(0, 15, 86, "Інстаграм вікторина «Новорічна вікторина»", "28.12.2021", 0.8f))
+            repository.insertStudentActivity(StudentActivityEntity(0, 13, 86, "Інстаграм вікторина «Вгадай серіал»", "29.01.2022", 1f))
+            repository.insertStudentActivity(StudentActivityEntity(0, 14, 86, "Інстаграм вікторина «Вгадай серіал»", "31.01.2022", 1f))
         }*/
 
         setContent {

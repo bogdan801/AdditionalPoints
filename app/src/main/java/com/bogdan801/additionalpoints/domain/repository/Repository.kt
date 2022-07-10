@@ -35,13 +35,14 @@ interface Repository {
     fun getGroups(): Flow<List<GroupEntity>>
     suspend fun getGroupNameByID(groupId: Int): String
     fun getStudents(): Flow<List<StudentEntity>>
+    fun getStudentActivities(): Flow<List<StudentActivityEntity>>
     suspend fun getStudentValueSum(studentID: Int): Float
     suspend fun getStudentsByGroup(groupID: Int) : List<StudentEntity>
     suspend fun getStudentsByGroupAndType(groupID: Int, isContract: Int) : List<StudentEntity>
     fun getGroupWithStudentsJunction(): Flow<List<GroupWithStudentsJunction>>
     suspend fun getGroupWithStudentsJunctionByID(groupID: Int): GroupWithStudentsJunction
     fun getStudentWithActivitiesJunction(): Flow<List<StudentWithActivitiesJunction>>
-    suspend fun getStudentWithActivitiesJunctionByID(studentID: Int): StudentWithActivitiesJunction
+    fun getStudentWithActivitiesJunctionByID(studentID: Int): Flow<StudentWithActivitiesJunction>
     suspend fun getAllDatesByGroup(groupID: Int): List<String>
     suspend fun getGetStudentActivitiesByMonth(studentID: Int, month: String): List<StudentActivityEntity>
 

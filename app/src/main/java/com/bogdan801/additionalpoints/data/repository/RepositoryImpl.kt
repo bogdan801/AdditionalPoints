@@ -99,6 +99,8 @@ class RepositoryImpl(
 
     override fun getStudents(): Flow<List<StudentEntity>> = dbDao.getStudents()
 
+    override fun getStudentActivities(): Flow<List<StudentActivityEntity>> = dbDao.getStudentActivities()
+
     override suspend fun getStudentValueSum(studentID: Int): Float {
         val value = dbDao.getStudentValueSum(studentID)
         return if(value!=null){
@@ -116,7 +118,7 @@ class RepositoryImpl(
 
     override fun getStudentWithActivitiesJunction(): Flow<List<StudentWithActivitiesJunction>> = dbDao.getStudentWithActivities()
 
-    override suspend fun getStudentWithActivitiesJunctionByID(studentID: Int): StudentWithActivitiesJunction = dbDao.getStudentWithActivitiesJunctionByID(studentID)
+    override fun getStudentWithActivitiesJunctionByID(studentID: Int): Flow<StudentWithActivitiesJunction> = dbDao.getStudentWithActivitiesJunctionByID(studentID)
 
     override suspend fun getAllDatesByGroup(groupID: Int): List<String> = dbDao.getAllDatesByGroup(groupID)
 

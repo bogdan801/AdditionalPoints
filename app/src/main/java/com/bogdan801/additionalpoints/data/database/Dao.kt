@@ -78,6 +78,9 @@ interface Dao {
     @Query("SELECT * FROM studententity ORDER BY fullName")
     fun getStudents() : Flow<List<StudentEntity>>
 
+    @Query("SELECT * FROM studentactivityentity ")
+    fun getStudentActivities(): Flow<List<StudentActivityEntity>>
+
     @Query("SELECT SUM(value) FROM studentactivityentity WHERE studentID == :studentID")
     suspend fun getStudentValueSum(studentID: Int): Float?
 
@@ -93,7 +96,7 @@ interface Dao {
 
     @Transaction
     @Query("SELECT * FROM studententity WHERE studentID == :studentID  ORDER BY fullName")
-    suspend fun getStudentWithActivitiesJunctionByID(studentID: Int): StudentWithActivitiesJunction
+    fun getStudentWithActivitiesJunctionByID(studentID: Int): Flow<StudentWithActivitiesJunction>
 
     @Query("SELECT date FROM studentactivityentity INNER JOIN studententity ON studentactivityentity.studentID=studententity.studentID WHERE groupID == :groupID")
     suspend fun getAllDatesByGroup(groupID: Int): List<String>

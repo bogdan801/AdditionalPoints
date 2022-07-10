@@ -50,10 +50,10 @@ fun StudentActivity.toStudentActivityEntity(): StudentActivityEntity = StudentAc
     value = activityInformation.value
 )
 
-fun GroupWithStudentsJunction.toGroup(): Group = Group(
+suspend fun GroupWithStudentsJunction.toGroup(repository: Repository): Group = Group(
     groupID = groupEntity.groupID,
     name = groupEntity.name,
-    students = students.map { it.toStudent() }
+    students = students.map { it.toStudent(repository) }
 )
 
 suspend fun StudentWithActivitiesJunction.toStudent(repository: Repository): Student = Student(
@@ -61,5 +61,6 @@ suspend fun StudentWithActivitiesJunction.toStudent(repository: Repository): Stu
     groupID = studentEntity.groupID,
     fullName = studentEntity.fullName,
     isContract = studentEntity.isContract,
-    activities = activities.map { it.toStudentActivity(repository) }
+    activities = activities.map { it.toStudentActivity(repository) },
+    valueSum = String.format("%.2f",activities.sumOf { it.value.toDouble() })
 )

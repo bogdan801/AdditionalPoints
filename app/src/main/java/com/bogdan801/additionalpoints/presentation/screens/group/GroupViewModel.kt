@@ -3,8 +3,10 @@ package com.bogdan801.additionalpoints.presentation.screens.group
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bogdan801.additionalpoints.data.mapper.toGroup
 import com.bogdan801.additionalpoints.data.mapper.toGroupEntity
 import com.bogdan801.additionalpoints.data.mapper.toStudent
@@ -13,6 +15,8 @@ import com.bogdan801.additionalpoints.domain.model.Group
 import com.bogdan801.additionalpoints.domain.model.Student
 import com.bogdan801.additionalpoints.domain.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,7 +24,8 @@ import javax.inject.Inject
 class GroupViewModel
 @Inject
 constructor(
-    private val repository: Repository
+    private val repository: Repository,
+    //handle: SavedStateHandle
 ): ViewModel() {
     //DATA
     private val _selectedGroupIndexState =  mutableStateOf(0)
@@ -30,8 +35,6 @@ constructor(
     val groupListState: State<List<Group>> = _groupListState
     val selectedGroup get() = groupListState.value[selectedGroupIndexState.value]
 
-    private val _groupStudentsList: MutableState<List<Student>> = mutableStateOf(listOf())
-    val groupStudentsList: State<List<Student>> = _groupStudentsList
 
     private val _budgetStudentsList: MutableState<List<Student>> = mutableStateOf(listOf())
     val budgetStudentsList: State<List<Student>> = _budgetStudentsList
@@ -41,13 +44,8 @@ constructor(
 
     private fun updateStudentsList(){
         if (selectedGroupIndexState.value >= groupListState.value.size) _selectedGroupIndexState.value = groupListState.value.lastIndex
-        viewModelScope.launch {
-            repository.getStudentsByGroup(selectedGroup.groupID).let{ studentEntitiesList ->
-                _groupStudentsList.value = studentEntitiesList.map { it.toStudent(repository) }
-                _budgetStudentsList.value = _groupStudentsList.value.filter { !it.isContract }
-                _contractStudentsList.value = _groupStudentsList.value.filter { it.isContract }
-            }
-        }
+        _budgetStudentsList.value = _groupListState.value[selectedGroupIndexState.value].students?.filter { !it.isContract } ?: listOf()
+        _contractStudentsList.value = _groupListState.value[selectedGroupIndexState.value].students?.filter { it.isContract } ?: listOf()
     }
 
     fun selectNewGroup(index: Int){
@@ -122,15 +120,25 @@ constructor(
 
     init {
         viewModelScope.launch {
-            repository.getGroups().collect { list ->
+            repository.getGroupWithStudentsJunction().collect { list ->
                 val size = _groupListState.value.size
-                _groupListState.value = list.map { it.toGroup() }
+                _groupListState.value = list.map { it.toGroup(repository) }
                 if (_groupListState.value.isNotEmpty()){
                     if(size != 0 && size<_groupListState.value.size) selectNewGroup(_groupListState.value.lastIndex)
                     else selectNewGroup(_selectedGroupIndexState.value)
                 }
-
             }
         }
+
+        viewModelScope.launch {
+            repository.getStudentActivities().collect{
+                if(_groupListState.value.isNotEmpty()){
+                    selectedGroup.students?.forEach { student ->
+                        student.valueSum = String.format("%.2f", repository.getStudentValueSum(student.studentID))
+                    }
+                }
+            }
+        }
+
     }
 }

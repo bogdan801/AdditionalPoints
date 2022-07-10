@@ -22,6 +22,17 @@ fun Navigation(
             GroupScreen(navController = navController)
         }
 
+        /*composable(
+            route = Screen.GroupsScreen.route + "/{doesNeedUpdate}",
+            arguments = listOf(
+                navArgument("doesNeedUpdate"){
+                    type = NavType.IntType
+                }
+            )
+        ){
+            GroupScreen(navController = navController)
+        }*/
+
         composable(
             route = Screen.StudentScreen.route + "/{studentID}",
             arguments = listOf(

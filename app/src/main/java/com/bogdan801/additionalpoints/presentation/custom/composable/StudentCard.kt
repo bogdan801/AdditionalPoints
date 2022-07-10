@@ -29,7 +29,7 @@ fun StudentCard(
     backgroundColor: Color = MaterialTheme.colors.surface,
     contentColor: Color = MaterialTheme.colors.secondaryVariant,
     border: BorderStroke? = null,
-    elevation: Dp = 0.dp,
+    elevation: Dp = 0.dp
 ) {
     Card(
         modifier = modifier.padding(bottom = 1.dp).clickable(onClick = onCardClick),

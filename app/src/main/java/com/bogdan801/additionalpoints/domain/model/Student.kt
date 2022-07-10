@@ -5,6 +5,6 @@ data class Student(
     val groupID: Int,
     val fullName: String,
     val isContract: Boolean,
-    val valueSum: String = "",
+    var valueSum: String = "",
     val activities: List<StudentActivity>? = null
 )
