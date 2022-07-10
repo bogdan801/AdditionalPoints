@@ -25,6 +25,7 @@ import com.bogdan801.additionalpoints.presentation.custom.composable.CustomTopAp
 import com.bogdan801.additionalpoints.presentation.custom.composable.MonthTitle
 import com.bogdan801.additionalpoints.presentation.custom.composable.StudentActivityCard
 import com.bogdan801.additionalpoints.presentation.custom.composable.TotalStudentValueCard
+import com.bogdan801.additionalpoints.presentation.custom.composable.dialogbox.AddStudentActivityDialog
 import com.bogdan801.additionalpoints.presentation.custom.composable.drawer.DrawerMenuItem
 import com.bogdan801.additionalpoints.presentation.custom.composable.drawer.MenuDrawer
 import com.bogdan801.additionalpoints.presentation.navigation.Screen
@@ -122,7 +123,7 @@ fun StudentScreen(
                 backgroundColor = MaterialTheme.colors.secondary,
                 contentColor = MaterialTheme.colors.onSecondary,
                 onClick = {
-
+                    viewModel.showAddActivityDialogState.value = true
                 }
             ) {
                 Icon(
@@ -136,6 +137,39 @@ fun StudentScreen(
         },
         floatingActionButtonPosition = FabPosition.Center
     ){
+        //add activity student
+        AddStudentActivityDialog(
+            showDialogState = viewModel.showAddActivityDialogState,
+            description = viewModel.activityDescriptionState.value,
+            onDescriptionChanged = {
+                viewModel.onDescriptionTextChanged(it)
+            },
+            date = viewModel.selectedDateState.value,
+            onDateSelectClick = {
+                viewModel.onSelectDateClick(context)
+            },
+            activityInformationList = viewModel.activityInformationListState.value,
+            index = viewModel.selectedActivityIndexState.value,
+            onCheckBoxIndexChanged = { index, _ ->
+                viewModel.selectActivityInformation(index)
+            },
+            value = viewModel.valueState.value,
+            onValueChanged = {
+                viewModel.onValueTextChange(it)
+            },
+            onSaveActivityClick = {
+                if(viewModel.activityDescriptionState.value.isNotBlank() && viewModel.valueState.value.isNotBlank()){
+                    viewModel.saveStudentActivity()
+                    Toast.makeText(context, "Запис збережено", Toast.LENGTH_SHORT).show()
+                }
+                else{
+                    Toast.makeText(context, "Спочатку введіть дані!", Toast.LENGTH_SHORT).show()
+                }
+            }
+        )
+        
+        
+        
         Box(modifier = Modifier.fillMaxSize()){
             if(viewModel.studentState.value.activities?.isNotEmpty() == true){
                 Column(modifier = Modifier

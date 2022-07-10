@@ -1,5 +1,6 @@
 package com.bogdan801.additionalpoints.presentation.custom.composable
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -15,14 +16,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 
 @Composable
 fun CustomDropDownMenu(
+    modifier: Modifier = Modifier,
     data: List<String> = listOf(),
     index: Int = 0,
+    showIcon: Boolean = true,
+    showFullTextInItems: Boolean = true,
     onItemSelected: (index: Int, text: String) -> Unit = { _: Int, _: String -> }
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -35,10 +41,9 @@ fun CustomDropDownMenu(
 
     Column {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp)
+            modifier = modifier
                 .clip(RoundedCornerShape(15.dp))
+                .background(MaterialTheme.colors.surface)
                 .border(
                     width = 1.dp,
                     color = MaterialTheme.colors.primary,
@@ -54,11 +59,13 @@ fun CustomDropDownMenu(
             Text(
                 modifier = Modifier
                     .align(Alignment.CenterStart)
-                    .padding(start = 8.dp),
+                    .padding(start = 8.dp, end = if(showIcon) 25.dp else 8.dp),
                 text = if(data.isEmpty()) "Груп ще не додано" else data[index],
-                style = MaterialTheme.typography.h4
+                style = MaterialTheme.typography.h4,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
-            if(data.isNotEmpty()){
+            if(data.isNotEmpty() && showIcon){
                 Icon(
                     modifier = Modifier.align(Alignment.CenterEnd).padding(end = 8.dp),
                     imageVector = icon,
@@ -80,7 +87,12 @@ fun CustomDropDownMenu(
                         onItemSelected(index, text)
                     }
                 ) {
-                    Text(text = text)
+                    if(showFullTextInItems){
+                        Text(text = text)
+                    }
+                    else{
+                        Text(text = text, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    }
                 }
             }
         }

@@ -1,6 +1,7 @@
 package com.bogdan801.additionalpoints.data.util
 
 import java.time.YearMonth
+import java.util.*
 
 fun getUkrainianMonthName(month: String): String = when(month.split('.')[0].toInt()) {
     1 -> "Січень"
@@ -21,4 +22,9 @@ fun getUkrainianMonthName(month: String): String = when(month.split('.')[0].toIn
 fun getLastDateOfMonth(month: String): String {
     val arr = month.split('.')
     return YearMonth.of(arr[1].toInt(),arr[0].toInt()).atEndOfMonth().dayOfMonth.toString()
+}
+
+fun getCurrentDate(): String {
+    val c = Calendar.getInstance()
+    return "${c.get(Calendar.DAY_OF_MONTH).toString().padStart(2, '0')}.${(c.get(Calendar.MONTH)+1).toString().padStart(2, '0')}.${c.get(Calendar.YEAR)}"
 }

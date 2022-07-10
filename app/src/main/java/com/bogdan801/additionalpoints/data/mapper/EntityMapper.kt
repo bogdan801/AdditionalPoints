@@ -47,7 +47,7 @@ fun StudentActivity.toStudentActivityEntity(): StudentActivityEntity = StudentAc
     activityID = activityInformation.activityID,
     description = description,
     date = date,
-    value = activityInformation.value
+    value = value
 )
 
 suspend fun GroupWithStudentsJunction.toGroup(repository: Repository): Group = Group(
