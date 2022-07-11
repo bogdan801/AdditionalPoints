@@ -16,13 +16,15 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
-suspend fun generateReport(months: List<String>, groupID: Int, repository: Repository, additionalInfo: AdditionalReportInfo): XSSFWorkbook{
+suspend fun generateReport(months: List<String>, groupID: Int, repository: Repository, additionalInfo: AdditionalReportInfo?): XSSFWorkbook{
     val workbook = XSSFWorkbook()
     months.forEach{ month ->
         createMonthSheet(workbook, month, groupID, repository)
     }
 
-    createGeneralSheet(workbook, months, groupID, repository, additionalInfo)
+    if(additionalInfo!=null){
+        createGeneralSheet(workbook, months, groupID, repository, additionalInfo)
+    }
 
     return workbook
 }

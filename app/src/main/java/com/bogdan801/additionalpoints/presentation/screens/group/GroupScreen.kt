@@ -20,9 +20,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.NavOptions
-//import androidx.hilt.navigation.compose.hiltViewModel
-//import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
 import com.bogdan801.additionalpoints.R
 import com.bogdan801.additionalpoints.presentation.custom.composable.*
@@ -89,7 +86,7 @@ fun GroupScreen(
                         scope.launch {
                             scaffoldState.drawerState.close()
                         }
-                        //navController.navigate(Screen.ReportScreen.route)
+                        navController.navigate(Screen.ReportScreen.route)
                     }
                 )
                 DrawerMenuItem(
@@ -210,7 +207,7 @@ fun GroupScreen(
                                     StudentCard(
                                         modifier = Modifier.fillMaxWidth(),
                                         studentFullName = student.fullName,
-                                        value = student.valueSum,
+                                        value = student.valueSum.value,
                                         onCardClick = {
                                             navController.navigate(Screen.StudentScreen.withArgs("${student.studentID}"))
                                         }
@@ -223,9 +220,8 @@ fun GroupScreen(
                                     StudentCard(
                                         modifier = Modifier.fillMaxWidth(),
                                         studentFullName = student.fullName,
-                                        value = student.valueSum,
+                                        value = student.valueSum.value,
                                         onCardClick = {
-
                                             navController.navigate(route = Screen.StudentScreen.withArgs("${student.studentID}"))
                                         }
                                     )

@@ -3,20 +3,15 @@ package com.bogdan801.additionalpoints.presentation.screens.group
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bogdan801.additionalpoints.data.mapper.toGroup
 import com.bogdan801.additionalpoints.data.mapper.toGroupEntity
-import com.bogdan801.additionalpoints.data.mapper.toStudent
 import com.bogdan801.additionalpoints.data.mapper.toStudentEntity
 import com.bogdan801.additionalpoints.domain.model.Group
 import com.bogdan801.additionalpoints.domain.model.Student
 import com.bogdan801.additionalpoints.domain.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -134,7 +129,7 @@ constructor(
             repository.getStudentActivities().collect{
                 if(_groupListState.value.isNotEmpty()){
                     selectedGroup.students?.forEach { student ->
-                        student.valueSum = String.format("%.2f", repository.getStudentValueSum(student.studentID))
+                        student.valueSum.value = String.format("%.2f", repository.getStudentValueSum(student.studentID))
                     }
                 }
             }

@@ -14,14 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.tooling.PreviewActivity
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bogdan801.additionalpoints.domain.model.ActivityInformation
 import com.bogdan801.additionalpoints.domain.model.StudentActivity
-import com.bogdan801.additionalpoints.presentation.theme.AdditionalPointsTheme
 
 @Composable
 fun StudentActivityCard(
@@ -99,28 +95,5 @@ fun StudentActivityCard(
                 }
             }
         }
-    }
-}
-
-@Preview
-@Composable
-fun PreviewActivityCard() {
-    AdditionalPointsTheme {
-        StudentActivityCard(
-            activity = StudentActivity(
-                0,
-                0,
-                ActivityInformation(
-                    0,
-                    "0",
-                    "0.0",
-                    "dfdfdddf",
-                    4f
-                ),
-                "fdfdfdfd",
-                "26.04.2020",
-                3.9f
-            )
-        )
     }
 }

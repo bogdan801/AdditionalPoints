@@ -7,7 +7,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bogdan801.additionalpoints.data.database.entities.StudentActivityEntity
 import com.bogdan801.additionalpoints.data.mapper.toActivityInformation
 import com.bogdan801.additionalpoints.data.mapper.toStudent
 import com.bogdan801.additionalpoints.data.mapper.toStudentActivityEntity
@@ -21,7 +20,6 @@ import com.bogdan801.additionalpoints.presentation.custom.composable.dialogbox.S
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -143,29 +141,31 @@ constructor(
 
     fun saveStudentActivity(intention: StudentActivityIntention){
         viewModelScope.launch {
-            if(intention == StudentActivityIntention.Add){
-                repository.insertStudentActivity(
-                    StudentActivity(
-                        studActID = 0,
-                        studentID = studentState.value.studentID,
-                        activityInformation = activityInformationListState.value[selectedActivityIndexState.value],
-                        description = activityDescriptionState.value,
-                        date = selectedDateState.value,
-                        value = valueState.value.toFloat()
-                    ).toStudentActivityEntity()
-                )
-            }
-            if(intention == StudentActivityIntention.Update){
-                repository.updateStudentActivity(
-                    StudentActivity(
-                        studActID = activityIdToEdit,
-                        studentID = studentState.value.studentID,
-                        activityInformation = activityInformationListState.value[selectedActivityIndexState.value],
-                        description = activityDescriptionState.value,
-                        date = selectedDateState.value,
-                        value = valueState.value.toFloat()
-                    ).toStudentActivityEntity()
-                )
+            when(intention){
+                StudentActivityIntention.Add -> {
+                    repository.insertStudentActivity(
+                        StudentActivity(
+                            studActID = 0,
+                            studentID = studentState.value.studentID,
+                            activityInformation = activityInformationListState.value[selectedActivityIndexState.value],
+                            description = activityDescriptionState.value,
+                            date = selectedDateState.value,
+                            value = valueState.value.toFloat()
+                        ).toStudentActivityEntity()
+                    )
+                }
+                StudentActivityIntention.Update -> {
+                    repository.updateStudentActivity(
+                        StudentActivity(
+                            studActID = activityIdToEdit,
+                            studentID = studentState.value.studentID,
+                            activityInformation = activityInformationListState.value[selectedActivityIndexState.value],
+                            description = activityDescriptionState.value,
+                            date = selectedDateState.value,
+                            value = valueState.value.toFloat()
+                        ).toStudentActivityEntity()
+                    )
+                }
             }
 
             showAddActivityDialogState.value = false
@@ -173,7 +173,7 @@ constructor(
     }
 
     //DATA
-    private val _studentState = mutableStateOf(Student(0, 0, "", false, ""))
+    private val _studentState = mutableStateOf(Student(0, 0, "", false, mutableStateOf("")))
     val studentState: State<Student> = _studentState
 
     var uniqueMonths: List<String> = listOf()

@@ -97,7 +97,7 @@ fun StudentScreen(
                         scope.launch {
                             scaffoldState.drawerState.close()
                         }
-                        //navController.navigate(Screen.ReportScreen.route)
+                        navController.navigate(Screen.ReportScreen.route)
                     }
                 )
                 DrawerMenuItem(
@@ -214,7 +214,7 @@ fun StudentScreen(
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
                     .padding(8.dp),
-                value = viewModel.totalStudentValue
+                value = viewModel.totalStudentValue.value
             )
         }
     }

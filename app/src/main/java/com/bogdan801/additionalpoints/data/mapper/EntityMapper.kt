@@ -1,5 +1,6 @@
 package com.bogdan801.additionalpoints.data.mapper
 
+import androidx.compose.runtime.mutableStateOf
 import com.bogdan801.additionalpoints.data.database.entities.*
 import com.bogdan801.additionalpoints.data.database.entities.relations.*
 import com.bogdan801.additionalpoints.domain.model.*
@@ -23,11 +24,11 @@ fun ActivityInformation.toActivityInformationEntity(): ActivityInformationEntity
 fun GroupEntity.toGroup(): Group = Group(groupID = groupID, name = name)
 fun Group.toGroupEntity(): GroupEntity = GroupEntity(groupID = groupID, name = name)
 
-fun StudentEntity.toStudent(): Student = Student(studentID=studentID, groupID = groupID, fullName=fullName, isContract=isContract, valueSum = "")
+fun StudentEntity.toStudent(): Student = Student(studentID=studentID, groupID = groupID, fullName=fullName, isContract=isContract, valueSum = mutableStateOf(""))
 
 suspend fun StudentEntity.toStudent(repository: Repository): Student {
     val valueSum = repository.getStudentValueSum(studentID)
-    return Student(studentID=studentID, groupID = groupID, fullName=fullName, isContract=isContract, valueSum = String.format("%.2f", valueSum))
+    return Student(studentID=studentID, groupID = groupID, fullName=fullName, isContract=isContract, valueSum = mutableStateOf(String.format("%.2f", valueSum)))
 }
 
 fun Student.toStudentEntity(): StudentEntity = StudentEntity(studentID=studentID, groupID = groupID, fullName=fullName, isContract=isContract)
@@ -62,5 +63,5 @@ suspend fun StudentWithActivitiesJunction.toStudent(repository: Repository): Stu
     fullName = studentEntity.fullName,
     isContract = studentEntity.isContract,
     activities = activities.map { it.toStudentActivity(repository) }.toMutableList(),
-    valueSum = String.format("%.2f",activities.sumOf { it.value.toDouble() })
+    valueSum = mutableStateOf(String.format("%.2f",activities.sumOf { it.value.toDouble() }))
 )

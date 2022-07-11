@@ -76,7 +76,7 @@ fun InfoScreen(
                         scope.launch {
                             scaffoldState.drawerState.close()
                         }
-                        //navController.navigate(Screen.ReportScreen.route)
+                        navController.navigate(Screen.ReportScreen.route)
                     }
                 )
                 DrawerMenuItem(
