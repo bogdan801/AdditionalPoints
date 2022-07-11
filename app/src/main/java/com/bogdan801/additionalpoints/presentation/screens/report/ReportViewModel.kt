@@ -48,7 +48,7 @@ constructor(
             _uniqueGroupMonthsState.value = dates.map { date ->
                 val arr = date.split('.')
                 "${arr[1]}.${arr[2]}"
-            }
+            }.distinct()
             monthsStatesMap = _uniqueGroupMonthsState.value.associateWith {
                 mutableStateOf(true)
             }
@@ -133,7 +133,7 @@ constructor(
         viewModelScope.launch {
             repository.getGroups().collect{ groups ->
                 _groupListState.value = groups.map { it.toGroup() }
-                selectGroup(selectedGroupIndexState.value)
+                if(_groupListState.value.isNotEmpty()) selectGroup(selectedGroupIndexState.value)
             }
         }
     }

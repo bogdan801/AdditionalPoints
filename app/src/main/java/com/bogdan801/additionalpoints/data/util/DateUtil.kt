@@ -18,7 +18,7 @@ fun getUkrainianMonthName(month: String): String = when(month.split('.')[0].toIn
     11 -> "Листопад"
     12 -> "Грудень"
     else -> ""
-}
+} + " " + month.split('.')[1]
 
 fun getLastDateOfMonth(month: String): String {
     val arr = month.split('.')

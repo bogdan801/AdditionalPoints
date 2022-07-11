@@ -111,30 +111,32 @@ fun ReportScreen(
             }
         },
         floatingActionButton = {
-            CustomButton(
-                modifier = Modifier.height(45.dp),
-                onClick = {
-                    if(viewModel.generalState.value){
-                        if(
-                            viewModel.courseState.value.isNotBlank()      &&
-                            viewModel.facultyState.value.isNotBlank()     &&
-                            viewModel.headOfGroupState.value.isNotBlank() &&
-                            viewModel.curatorState.value.isNotBlank()
-                        ){
-                            viewModel.onGenerateReportClick(launcher, workbook)
+            if(viewModel.groupListState.value.isNotEmpty()){
+                if(viewModel.uniqueGroupMonthsState.value.isNotEmpty()){
+                    CustomButton(
+                        modifier = Modifier.height(45.dp),
+                        onClick = {
+                            if(viewModel.generalState.value){
+                                if(
+                                    viewModel.courseState.value.isNotBlank()      &&
+                                    viewModel.facultyState.value.isNotBlank()     &&
+                                    viewModel.headOfGroupState.value.isNotBlank() &&
+                                    viewModel.curatorState.value.isNotBlank()
+                                ){
+                                    viewModel.onGenerateReportClick(launcher, workbook)
+                                }
+                                else{
+                                    Toast.makeText(context, "Спочатку заповніть всі поля!", Toast.LENGTH_LONG).show()
+                                }
+                            }
+                            else{
+                                viewModel.onGenerateReportClick(launcher, workbook)
+                            }
                         }
-                        else{
-                            Toast.makeText(context, "Спочатку заповніть всі поля!", Toast.LENGTH_LONG).show()
-                        }
+                    ) {
+                        Text(text = "Згенерувати", color = MaterialTheme.colors.onSecondary)
                     }
-                    else{
-                        viewModel.onGenerateReportClick(launcher, workbook)
-                    }
-
-
                 }
-            ) {
-                Text(text = "Згенерувати", color = MaterialTheme.colors.onSecondary)
             }
         },
         floatingActionButtonPosition = FabPosition.Center
