@@ -38,6 +38,12 @@ class RepositoryImpl(
         dbDao.deleteActivity(activityID)
     }
 
+
+    //update
+    override suspend fun updateStudentActivity(studentActivityEntity: StudentActivityEntity) {
+        dbDao.updateStudentActivity(studentActivityEntity)
+    }
+
     //delete
     override suspend fun deleteGroup(groupId: Int) {
         deleteGroupStudents(groupId)

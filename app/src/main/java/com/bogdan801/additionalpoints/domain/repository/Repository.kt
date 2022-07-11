@@ -14,6 +14,9 @@ interface Repository {
     suspend fun insertStudent(studentEntity: StudentEntity)
     suspend fun insertStudentActivity(studentActivityEntity: StudentActivityEntity)
 
+    //update
+    suspend fun updateStudentActivity(studentActivityEntity: StudentActivityEntity)
+
     //delete
     suspend fun deleteActivity(activityID: Int)
     suspend fun deleteGroup(groupId: Int)

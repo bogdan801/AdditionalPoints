@@ -1,6 +1,5 @@
 package com.bogdan801.additionalpoints.presentation.custom.composable.dialogbox
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
@@ -17,9 +16,15 @@ import com.bogdan801.additionalpoints.presentation.custom.composable.CustomButto
 import com.bogdan801.additionalpoints.presentation.custom.composable.CustomDropDownMenu
 import com.bogdan801.additionalpoints.presentation.custom.composable.CustomTextField
 
+enum class StudentActivityIntention{
+    Add,
+    Update
+}
+
 @Composable
-fun AddStudentActivityDialog(
+fun StudentActivityDialog(
     showDialogState: MutableState<Boolean>,
+    dialogType: StudentActivityIntention = StudentActivityIntention.Add,
     description: String = "",
     onDescriptionChanged: (newText: String) -> Unit = {},
     date: String = getCurrentDate(),
@@ -33,7 +38,7 @@ fun AddStudentActivityDialog(
 ) {
     BasicDialogBox(
         isDialogOpen = showDialogState,
-        title = "Додавання балу"
+        title = if(dialogType == StudentActivityIntention.Add) "Додавання балу" else "Оновлення балу"
     ){
         Column(modifier = Modifier
             .fillMaxWidth()

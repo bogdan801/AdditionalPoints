@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -20,12 +19,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.bogdan801.additionalpoints.R
-import com.bogdan801.additionalpoints.data.util.getUkrainianMonthName
 import com.bogdan801.additionalpoints.presentation.custom.composable.CustomTopAppBar
 import com.bogdan801.additionalpoints.presentation.custom.composable.MonthTitle
 import com.bogdan801.additionalpoints.presentation.custom.composable.StudentActivityCard
 import com.bogdan801.additionalpoints.presentation.custom.composable.TotalStudentValueCard
-import com.bogdan801.additionalpoints.presentation.custom.composable.dialogbox.AddStudentActivityDialog
+import com.bogdan801.additionalpoints.presentation.custom.composable.dialogbox.StudentActivityDialog
 import com.bogdan801.additionalpoints.presentation.custom.composable.drawer.DrawerMenuItem
 import com.bogdan801.additionalpoints.presentation.custom.composable.drawer.MenuDrawer
 import com.bogdan801.additionalpoints.presentation.navigation.Screen
@@ -123,7 +121,7 @@ fun StudentScreen(
                 backgroundColor = MaterialTheme.colors.secondary,
                 contentColor = MaterialTheme.colors.onSecondary,
                 onClick = {
-                    viewModel.showAddActivityDialogState.value = true
+                    viewModel.onAddActivityDialogClick()
                 }
             ) {
                 Icon(
@@ -138,8 +136,9 @@ fun StudentScreen(
         floatingActionButtonPosition = FabPosition.Center
     ){
         //add activity student
-        AddStudentActivityDialog(
+        StudentActivityDialog(
             showDialogState = viewModel.showAddActivityDialogState,
+            dialogType = viewModel.intention,
             description = viewModel.activityDescriptionState.value,
             onDescriptionChanged = {
                 viewModel.onDescriptionTextChanged(it)
@@ -159,7 +158,7 @@ fun StudentScreen(
             },
             onSaveActivityClick = {
                 if(viewModel.activityDescriptionState.value.isNotBlank() && viewModel.valueState.value.isNotBlank()){
-                    viewModel.saveStudentActivity()
+                    viewModel.saveStudentActivity(viewModel.intention)
                     Toast.makeText(context, "Запис збережено", Toast.LENGTH_SHORT).show()
                 }
                 else{
@@ -189,6 +188,9 @@ fun StudentScreen(
                             StudentActivityCard(
                                 modifier = Modifier.padding(vertical = 4.dp),
                                 activity = activity,
+                                onActivityClick = {
+                                    viewModel.onUpdateActivityDialogClick(activity)
+                                },
                                 onDeleteActivityClick = {
                                     viewModel.deleteActivityClick(activity.studActID)
                                     Toast.makeText(context, "Запис видалено", Toast.LENGTH_SHORT).show()

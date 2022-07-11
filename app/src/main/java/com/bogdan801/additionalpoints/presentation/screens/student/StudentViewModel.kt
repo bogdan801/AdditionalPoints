@@ -12,10 +12,12 @@ import com.bogdan801.additionalpoints.data.mapper.toActivityInformation
 import com.bogdan801.additionalpoints.data.mapper.toStudent
 import com.bogdan801.additionalpoints.data.mapper.toStudentActivityEntity
 import com.bogdan801.additionalpoints.data.util.getCurrentDate
+import com.bogdan801.additionalpoints.data.util.toLocalDate
 import com.bogdan801.additionalpoints.domain.model.ActivityInformation
 import com.bogdan801.additionalpoints.domain.model.Student
 import com.bogdan801.additionalpoints.domain.model.StudentActivity
 import com.bogdan801.additionalpoints.domain.repository.Repository
+import com.bogdan801.additionalpoints.presentation.custom.composable.dialogbox.StudentActivityIntention
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -45,8 +47,28 @@ constructor(
         }
     }
 
-    //ADD ACTIVITY DIALOG
+    //ACTIVITY DIALOG
     val showAddActivityDialogState = mutableStateOf(false)
+
+    fun onAddActivityDialogClick(){
+        intention = StudentActivityIntention.Add
+        showAddActivityDialogState.value = true
+        _activityDescriptionState.value = ""
+        _selectedDateState.value = getCurrentDate()
+        _selectedActivityIndexState.value = 0
+        _valueState.value = activityInformationListState.value[_selectedActivityIndexState.value].value.toString()
+    }
+
+    private var activityIdToEdit = 0
+    fun onUpdateActivityDialogClick(activity: StudentActivity){
+        intention = StudentActivityIntention.Update
+        activityIdToEdit = activity.studActID
+        showAddActivityDialogState.value = true
+        _activityDescriptionState.value = activity.description
+        _selectedDateState.value = activity.date
+        _selectedActivityIndexState.value = activityInformationListState.value.indexOf(activityInformationListState.value.find { it.activityID == activity.activityInformation.activityID })
+        _valueState.value = activity.value.toString()
+    }
 
     private val _activityDescriptionState = mutableStateOf("")
     val activityDescriptionState: State<String> = _activityDescriptionState
@@ -59,10 +81,10 @@ constructor(
     val selectedDateState: State<String> = _selectedDateState
 
     fun onSelectDateClick(context: Context){
-        val currentDateTime = Calendar.getInstance()
-        val startYear = currentDateTime.get(Calendar.YEAR)
-        val startMonth = currentDateTime.get(Calendar.MONTH)
-        val startDay = currentDateTime.get(Calendar.DAY_OF_MONTH)
+        val arr = _selectedDateState.value.split('.')
+        val startYear = arr[2].toInt()
+        val startMonth = arr[1].toInt()-1
+        val startDay = arr[0].toInt()
 
         DatePickerDialog(context, { _, year, month, day ->
             _selectedDateState.value = "${day.toString().padStart(2, '0')}.${(month+1).toString().padStart(2, '0')}.${year}"
@@ -85,7 +107,7 @@ constructor(
 
     fun onValueTextChange(newText: String){
         if(newText.length>_valueState.value.length){
-            if(newText.isNotEmpty() && newText.length <= 4){
+            if(newText.isNotEmpty() && newText.length <= 5){
                 val arr = _valueState.value.toCharArray()
                 var newChar = newText.last()
 
@@ -95,7 +117,6 @@ constructor(
                         break
                     }
                 }
-
                 if("1234567890".contains(newChar)){
                     if((_valueState.value.startsWith('0') && _valueState.value.contains("0.")) || !valueState.value.startsWith('0')){
                         _valueState.value = newText
@@ -106,30 +127,47 @@ constructor(
                         _valueState.value = newText
                     }
                 }
+                else if (newChar == '-'){
+                    if(_valueState.value.isBlank()){
+                        _valueState.value = newText
+                    }
+                }
             }
-
         }
         else{
             _valueState.value = newText
         }
     }
 
-    fun saveStudentActivity(){
+    var intention: StudentActivityIntention = StudentActivityIntention.Add
+
+    fun saveStudentActivity(intention: StudentActivityIntention){
         viewModelScope.launch {
-            repository.insertStudentActivity(
-                StudentActivity(
-                    studActID = 0,
-                    studentID = studentState.value.studentID,
-                    activityInformation = activityInformationListState.value[selectedActivityIndexState.value],
-                    description = activityDescriptionState.value,
-                    date = selectedDateState.value,
-                    value = valueState.value.toFloat()
-                ).toStudentActivityEntity()
-            )
-            _activityDescriptionState.value = ""
-            _selectedDateState.value = getCurrentDate()
-            _selectedActivityIndexState.value = 0
-            _valueState.value = "0"
+            if(intention == StudentActivityIntention.Add){
+                repository.insertStudentActivity(
+                    StudentActivity(
+                        studActID = 0,
+                        studentID = studentState.value.studentID,
+                        activityInformation = activityInformationListState.value[selectedActivityIndexState.value],
+                        description = activityDescriptionState.value,
+                        date = selectedDateState.value,
+                        value = valueState.value.toFloat()
+                    ).toStudentActivityEntity()
+                )
+            }
+            if(intention == StudentActivityIntention.Update){
+                repository.updateStudentActivity(
+                    StudentActivity(
+                        studActID = activityIdToEdit,
+                        studentID = studentState.value.studentID,
+                        activityInformation = activityInformationListState.value[selectedActivityIndexState.value],
+                        description = activityDescriptionState.value,
+                        date = selectedDateState.value,
+                        value = valueState.value.toFloat()
+                    ).toStudentActivityEntity()
+                )
+            }
+
             showAddActivityDialogState.value = false
         }
     }
@@ -152,6 +190,7 @@ constructor(
             repository.getStudentWithActivitiesJunctionByID(handle.get<Int>("studentID")!!).collect{ junction ->
                 if(!deleted){
                     _studentState.value = junction.toStudent(repository)
+                    _studentState.value.activities?.sortBy { toLocalDate(it.date) }
 
                     uniqueMonths = _studentState.value.activities?.map {
                         val parts = it.date.split('.')

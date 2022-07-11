@@ -21,6 +21,10 @@ interface Dao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertStudentActivity(studentActivityEntity: StudentActivityEntity)
 
+    //update
+    @Update
+    suspend fun updateStudentActivity(studentActivityEntity: StudentActivityEntity)
+
     //delete
     @Query("DELETE FROM activityinformationentity WHERE activityID == :activityID")
     suspend fun deleteActivity(activityID: Int)

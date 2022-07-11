@@ -61,6 +61,6 @@ suspend fun StudentWithActivitiesJunction.toStudent(repository: Repository): Stu
     groupID = studentEntity.groupID,
     fullName = studentEntity.fullName,
     isContract = studentEntity.isContract,
-    activities = activities.map { it.toStudentActivity(repository) },
+    activities = activities.map { it.toStudentActivity(repository) }.toMutableList(),
     valueSum = String.format("%.2f",activities.sumOf { it.value.toDouble() })
 )

@@ -1,5 +1,6 @@
 package com.bogdan801.additionalpoints.data.util
 
+import kotlinx.datetime.LocalDate
 import java.time.YearMonth
 import java.util.*
 
@@ -27,4 +28,9 @@ fun getLastDateOfMonth(month: String): String {
 fun getCurrentDate(): String {
     val c = Calendar.getInstance()
     return "${c.get(Calendar.DAY_OF_MONTH).toString().padStart(2, '0')}.${(c.get(Calendar.MONTH)+1).toString().padStart(2, '0')}.${c.get(Calendar.YEAR)}"
+}
+
+fun toLocalDate(date: String): LocalDate {
+    val arr = date.split('.')
+    return LocalDate(dayOfMonth = arr[0].toInt(), monthNumber = arr[1].toInt(), year = arr[2].toInt())
 }
