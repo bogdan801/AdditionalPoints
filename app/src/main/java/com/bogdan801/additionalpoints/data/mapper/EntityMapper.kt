@@ -13,13 +13,14 @@ fun ActivityInformationEntity.toActivityInformation(): ActivityInformation = Act
     description = description,
     value = value
 )
-fun ActivityInformation.toActivityInformationEntity(): ActivityInformationEntity = ActivityInformationEntity(
+
+/*fun ActivityInformation.toActivityInformationEntity(): ActivityInformationEntity = ActivityInformationEntity(
     activityID = activityID,
     paragraph = paragraph,
     block = block,
     description = description,
     value = value
-)
+)*/
 
 fun GroupEntity.toGroup(): Group = Group(groupID = groupID, name = name)
 fun Group.toGroupEntity(): GroupEntity = GroupEntity(groupID = groupID, name = name)

@@ -2,7 +2,6 @@ package com.bogdan801.additionalpoints.presentation.custom.composable
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable

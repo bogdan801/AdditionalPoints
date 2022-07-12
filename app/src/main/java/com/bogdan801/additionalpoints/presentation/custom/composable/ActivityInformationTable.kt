@@ -10,7 +10,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.bogdan801.additionalpoints.domain.model.ActivityInformation
@@ -135,24 +134,5 @@ fun RowScope.TableCell(
             .weight(weight)
             .padding(8.dp),
         color = textColor
-    )
-}
-
-@Preview
-@Composable
-fun PreviewActivityInformationTable(){
-    ActivityInformationTable(
-        data = listOf(
-            ActivityInformation(1, "1", "1.1", "ffrfrfrf", 5f),
-            ActivityInformation(2, "2", "1.1", "fbgbgb", 5f),
-            ActivityInformation(3, "3", "1.1", "sasscfbff", 5f),
-            ActivityInformation(4, "4", "1.1", "sdsfgbg", 5f),
-        ),
-        headerBackgroundColor = Color(0xFF436129),
-        headerTextColor = Color.White,
-        headerBorderWidth = 0.5.dp,
-        headerBorderColor = Color(0xFF92A760),
-        contentBorderWidth = 0.5.dp,
-        contentBorderColor = Color.Gray
     )
 }

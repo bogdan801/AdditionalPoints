@@ -166,9 +166,7 @@ fun StudentScreen(
                 }
             }
         )
-        
-        
-        
+
         Box(modifier = Modifier.fillMaxSize()){
             if(viewModel.studentState.value.activities?.isNotEmpty() == true){
                 Column(modifier = Modifier

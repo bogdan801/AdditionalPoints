@@ -7,17 +7,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.bogdan801.additionalpoints.presentation.theme.AdditionalPointsTheme
 
 @Composable
 fun StudentCard(
@@ -70,17 +67,5 @@ fun StudentCard(
                 textAlign = TextAlign.Center
             )
         }
-    }
-}
-
-@Preview
-@Composable
-fun PreviewCard(){
-    AdditionalPointsTheme {
-        StudentCard(
-            modifier = Modifier.fillMaxWidth(),
-            studentFullName = "Дерига Богдан Григорович",
-            value = "0.00"
-        )
     }
 }
