@@ -39,8 +39,8 @@ constructor(
 
     private fun updateStudentsList(){
         if (selectedGroupIndexState.value >= groupListState.value.size) _selectedGroupIndexState.value = groupListState.value.lastIndex
-        _budgetStudentsList.value = _groupListState.value[selectedGroupIndexState.value].students?.filter { !it.isContract }?.sortedBy { it.fullName } ?: listOf()
-        _contractStudentsList.value = _groupListState.value[selectedGroupIndexState.value].students?.filter { it.isContract }?.sortedBy { it.fullName } ?: listOf()
+        _budgetStudentsList.value = _groupListState.value[selectedGroupIndexState.value].students?.filter {student -> !student.isContract }?.sortedBy { it.fullName.lowercase() } ?: listOf()
+        _contractStudentsList.value = _groupListState.value[selectedGroupIndexState.value].students?.filter { student -> student.isContract }?.sortedBy { it.fullName.lowercase() } ?: listOf()
     }
 
     fun selectNewGroup(index: Int){
