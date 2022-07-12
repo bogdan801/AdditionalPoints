@@ -173,8 +173,8 @@ fun StudentScreen(
             if(viewModel.studentState.value.activities?.isNotEmpty() == true){
                 Column(modifier = Modifier
                     .fillMaxSize()
-                    .padding(start = 8.dp, end = 8.dp, bottom = 70.dp)
                     .verticalScroll(rememberScrollState())
+                    .padding(start = 8.dp, end = 8.dp, bottom = 70.dp)
                 ) {
                     Spacer(modifier = Modifier.height(4.dp))
                     viewModel.uniqueMonths.forEach { month ->
@@ -198,6 +198,7 @@ fun StudentScreen(
                             )
                         }
                     }
+                    Spacer(modifier = Modifier.height(65.dp))
                 }
             }
             else{

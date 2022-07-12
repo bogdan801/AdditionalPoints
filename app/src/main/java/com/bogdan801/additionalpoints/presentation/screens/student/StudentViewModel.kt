@@ -54,7 +54,8 @@ constructor(
         _activityDescriptionState.value = ""
         _selectedDateState.value = getCurrentDate()
         _selectedActivityIndexState.value = 0
-        _valueState.value = activityInformationListState.value[_selectedActivityIndexState.value].value.toString()
+        _valueState.value = activityInformationListState.value[_selectedActivityIndexState.value].value.toString().replace(',', '.')
+        println()
     }
 
     private var activityIdToEdit = 0
@@ -100,7 +101,7 @@ constructor(
 
     fun selectActivityInformation(index: Int){
         _selectedActivityIndexState.value = index
-        _valueState.value = String.format("%.2f", _activityInformationListState.value[index].value)
+        _valueState.value = String.format("%.2f", _activityInformationListState.value[index].value).replace(',', '.')
     }
 
     fun onValueTextChange(newText: String){

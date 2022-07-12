@@ -57,11 +57,11 @@ fun StudentActivityCard(
                     .background(color = MaterialTheme.colors.secondaryVariant),
             )
             Box(
-                modifier = Modifier.fillMaxHeight().width(65.dp)
+                modifier = Modifier.fillMaxHeight().width(70.dp)
             ) {
                 Text(
                     modifier = Modifier.align(Alignment.Center),
-                    text = String.format("%.2f", activity.value),
+                    text = String.format("%.2f", activity.value).replace(',', '.'),
                     style = MaterialTheme.typography.h2
                 )
                 Text(
@@ -80,7 +80,7 @@ fun StudentActivityCard(
                     .background(color = MaterialTheme.colors.secondaryVariant),
             )
             Box(
-                modifier = Modifier.fillMaxHeight().width(65.dp),
+                modifier = Modifier.fillMaxHeight().width(70.dp),
                 contentAlignment = Alignment.Center
             ) {
                 IconButton(
