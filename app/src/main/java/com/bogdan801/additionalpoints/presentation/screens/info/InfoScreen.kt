@@ -65,7 +65,7 @@ fun InfoScreen(
                         scope.launch {
                             scaffoldState.drawerState.close()
                         }
-                        navController.popBackStack()
+                        navController.popBackStack(route = Screen.GroupsScreen.route, inclusive = false)
                     }
                 )
                 DrawerMenuItem(
