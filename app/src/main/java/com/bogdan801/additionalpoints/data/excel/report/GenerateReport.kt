@@ -200,7 +200,11 @@ suspend fun createGeneralSheet(
     styleRegularLeftAlign.setFont(fontRegular)
 
     //HEADER
-    createCell(createRow(sheet, 0, styleTitle, 600), 0, "Список бакалаврів ${additionalInfo.course}-го року навчання(${additionalInfo.faculty}, $groupName)", cellStyle = styleTitle)
+    val degree = when(additionalInfo.degree){
+        Degree.Bachelor -> "бакалаврів"
+        Degree.Master -> "магістрів"
+    }
+    createCell(createRow(sheet, 0, styleTitle, 600), 0, "Список $degree ${additionalInfo.course}-го року навчання(${additionalInfo.faculty}, $groupName)", cellStyle = styleTitle)
 
     //TITLES
     val titlesRow = createRow(sheet, 1, styleBold)

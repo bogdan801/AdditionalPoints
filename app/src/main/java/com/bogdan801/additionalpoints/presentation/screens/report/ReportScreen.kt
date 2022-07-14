@@ -26,11 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.bogdan801.additionalpoints.R
+import com.bogdan801.additionalpoints.data.excel.report.Degree
 import com.bogdan801.additionalpoints.data.util.getUkrainianMonthName
-import com.bogdan801.additionalpoints.presentation.custom.composable.CustomButton
-import com.bogdan801.additionalpoints.presentation.custom.composable.CustomTextField
-import com.bogdan801.additionalpoints.presentation.custom.composable.CustomTopAppBar
-import com.bogdan801.additionalpoints.presentation.custom.composable.GroupSelector
+import com.bogdan801.additionalpoints.presentation.custom.composable.*
 import com.bogdan801.additionalpoints.presentation.custom.composable.drawer.DrawerMenuItem
 import com.bogdan801.additionalpoints.presentation.custom.composable.drawer.MenuDrawer
 import com.bogdan801.additionalpoints.presentation.navigation.Screen
@@ -257,6 +255,23 @@ fun ReportScreen(
                                 ) {
                                     Text(
                                         modifier = Modifier.padding(start = 4.dp),
+                                        text = "Освітній ступінь",
+                                        style = MaterialTheme.typography.h2,
+                                        color = MaterialTheme.colors.secondaryVariant
+                                    )
+                                    CustomDropDownMenu(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(vertical = 4.dp)
+                                            .height(45.dp),
+                                        data = Degree.values().map{ it.degreeName },
+                                        index = viewModel.degreeIndexState.value,
+                                        onItemSelected = { index, _ ->
+                                            viewModel.degreeIndexSelected(index)
+                                        }
+                                    )
+                                    Text(
+                                        modifier = Modifier.padding(start = 4.dp),
                                         text = "Курс",
                                         style = MaterialTheme.typography.h2,
                                         color = MaterialTheme.colors.secondaryVariant
@@ -326,7 +341,7 @@ fun ReportScreen(
                                         },
                                         placeholder = "ПІБ"
                                     )
-                                    Spacer(modifier = Modifier.height(100.dp))
+                                    Spacer(modifier = Modifier.height(65.dp))
                                 }
 
                             }

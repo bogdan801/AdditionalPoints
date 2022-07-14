@@ -29,7 +29,9 @@ constructor(
     private val repository: Repository,
     handle: SavedStateHandle
 ): ViewModel() {
-    //DELETE STUDENT
+    //DELETE STUDENT DIALOG
+    val showDeleteStudentDialogState = mutableStateOf(false)
+
     fun deleteStudent(){
         viewModelScope.launch {
             deleted = true
@@ -38,14 +40,9 @@ constructor(
     }
     private var deleted = false
 
-    //DELETE ACTIVITY
-    fun deleteActivityClick(id: Int){
-        viewModelScope.launch {
-            repository.deleteStudentActivity(id)
-        }
-    }
 
-    //ACTIVITY DIALOG
+
+    //ADD/UPDATE ACTIVITY DIALOG
     val showAddActivityDialogState = mutableStateOf(false)
 
     fun onAddActivityDialogClick(){
@@ -170,6 +167,13 @@ constructor(
             }
 
             showAddActivityDialogState.value = false
+        }
+    }
+
+    //DELETE ACTIVITY
+    fun deleteActivityClick(id: Int){
+        viewModelScope.launch {
+            repository.deleteStudentActivity(id)
         }
     }
 

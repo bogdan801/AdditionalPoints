@@ -23,6 +23,7 @@ import com.bogdan801.additionalpoints.presentation.custom.composable.CustomTopAp
 import com.bogdan801.additionalpoints.presentation.custom.composable.MonthTitle
 import com.bogdan801.additionalpoints.presentation.custom.composable.StudentActivityCard
 import com.bogdan801.additionalpoints.presentation.custom.composable.TotalStudentValueCard
+import com.bogdan801.additionalpoints.presentation.custom.composable.dialogbox.DeleteStudentDialog
 import com.bogdan801.additionalpoints.presentation.custom.composable.dialogbox.StudentActivityDialog
 import com.bogdan801.additionalpoints.presentation.custom.composable.drawer.DrawerMenuItem
 import com.bogdan801.additionalpoints.presentation.custom.composable.drawer.MenuDrawer
@@ -63,9 +64,7 @@ fun StudentScreen(
                 action = {
                     IconButton(
                         onClick = {
-                            Toast.makeText(context, "Студента видалено", Toast.LENGTH_SHORT).show()
-                            viewModel.deleteStudent()
-                            navController.popBackStack()
+                            viewModel.showDeleteStudentDialogState.value = true
                         }
                     ) {
                         Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete student")
@@ -135,7 +134,7 @@ fun StudentScreen(
         },
         floatingActionButtonPosition = FabPosition.Center
     ){
-        //add activity student
+        //add activity student dialog
         StudentActivityDialog(
             showDialogState = viewModel.showAddActivityDialogState,
             dialogType = viewModel.intention,
@@ -164,6 +163,16 @@ fun StudentScreen(
                 else{
                     Toast.makeText(context, "Спочатку введіть дані!", Toast.LENGTH_SHORT).show()
                 }
+            }
+        )
+
+        //delete student dialog
+        DeleteStudentDialog(
+            showDialogState = viewModel.showDeleteStudentDialogState,
+            onDeleteStudentClick = {
+                Toast.makeText(context, "Студента видалено", Toast.LENGTH_SHORT).show()
+                viewModel.deleteStudent()
+                navController.popBackStack()
             }
         )
 

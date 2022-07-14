@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bogdan801.additionalpoints.data.excel.report.AdditionalReportInfo
+import com.bogdan801.additionalpoints.data.excel.report.Degree
 import com.bogdan801.additionalpoints.data.mapper.toGroup
 import com.bogdan801.additionalpoints.data.util.toLocalDate
 import com.bogdan801.additionalpoints.domain.model.Group
@@ -64,6 +65,14 @@ constructor(
         _generalState.value = !_generalState.value
     }
 
+    //degree index state
+    private val _degreeIndexState: MutableState<Int> = mutableStateOf(0)
+    val degreeIndexState: State<Int> = _degreeIndexState
+
+    fun degreeIndexSelected(index: Int){
+        _degreeIndexState.value = index
+    }
+
     //course state
     private val _courseState: MutableState<String> = mutableStateOf("")
     val courseState: State<String> = _courseState
@@ -115,13 +124,11 @@ constructor(
     }
 
     //GENERATE REPORT
-
-
     fun onGenerateReportClick(launcher: ActivityResultLauncher<String>, workbook: MutableState<XSSFWorkbook>){
         viewModelScope.launch {
             workbook.value = repository.generateReportWorkbook(
                 months = uniqueGroupMonthsState.value.filter { monthsStatesMap[it]?.value == true }, selectedGroup.groupID,
-                additionalInfo = if(_generalState.value) AdditionalReportInfo(courseState.value, facultyState.value, headOfGroupState.value, curatorState.value) else null
+                additionalInfo = if(_generalState.value) AdditionalReportInfo(Degree.values()[degreeIndexState.value], courseState.value, facultyState.value, headOfGroupState.value, curatorState.value) else null
             )
 
             launcher.launch("Звіт.xlsx")
