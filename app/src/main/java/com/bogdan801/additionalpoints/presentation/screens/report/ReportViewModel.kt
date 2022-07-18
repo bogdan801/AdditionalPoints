@@ -37,6 +37,14 @@ constructor(
 
     var monthsStatesMap: Map<String, MutableState<Boolean>> = mapOf()
 
+    fun isMonthSelected(): Boolean {
+        var isSelected = false
+        monthsStatesMap.forEach{ entry ->
+            if(entry.value.value == true) isSelected = true
+        }
+        return isSelected
+    }
+
     fun selectGroup(index: Int){
         _selectedGroupIndexState.value = index
         getSelectedGroupMonths()
