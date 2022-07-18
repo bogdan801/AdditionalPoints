@@ -12,10 +12,12 @@ private val LightColorPalette = lightColors(
     secondaryVariant = Green100,
     background = Green20,
     surface = Color.White,
+    error = RedError,
     onPrimary = Color.White,
     onSecondary = Color.White,
     onBackground = Color.Black,
     onSurface = Color.Black,
+    onError = Color.White
 )
 
 @Composable

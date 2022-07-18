@@ -40,8 +40,6 @@ constructor(
     }
     private var deleted = false
 
-
-
     //ADD/UPDATE ACTIVITY DIALOG
     val showAddActivityDialogState = mutableStateOf(false)
 

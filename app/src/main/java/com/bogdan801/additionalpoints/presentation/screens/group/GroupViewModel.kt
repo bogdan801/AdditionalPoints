@@ -48,6 +48,11 @@ constructor(
         updateStudentsList()
     }
 
+    fun deleteStudent(studentID: Int){
+        viewModelScope.launch {
+            repository.deleteStudent(studentID)
+        }
+    }
 
     //ADD GROUP DIALOG
     //show add dialog state
@@ -112,7 +117,6 @@ constructor(
             selectNewGroup(_selectedGroupIndexState.value)
         }
     }
-
     init {
         viewModelScope.launch {
             repository.getGroupWithStudentsJunction().collect { list ->
@@ -134,6 +138,5 @@ constructor(
                 }
             }
         }
-
     }
 }

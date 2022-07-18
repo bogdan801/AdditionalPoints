@@ -2,9 +2,9 @@ package com.bogdan801.additionalpoints.presentation.screens.group
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -30,6 +30,7 @@ import com.bogdan801.additionalpoints.presentation.custom.composable.drawer.Draw
 import com.bogdan801.additionalpoints.presentation.custom.composable.drawer.MenuDrawer
 import com.bogdan801.additionalpoints.presentation.navigation.Screen
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun GroupScreen(
     navController: NavHostController,
@@ -195,34 +196,45 @@ fun GroupScreen(
             )
             Box(modifier = Modifier.fillMaxSize()){
                 if(viewModel.groupListState.value.isNotEmpty()){
-                    if(viewModel.budgetStudentsList.value.isNotEmpty() || viewModel.contractStudentsList.value.isNotEmpty()){
-                        Column(
+                    if(viewModel.selectedGroup.students!!.isNotEmpty()){
+                        LazyColumn(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .verticalScroll(rememberScrollState())
-                        ) {
+                        ){
                             if(viewModel.budgetStudentsList.value.isNotEmpty()){
-                                Text(modifier = Modifier.padding(8.dp), text = "БЮДЖЕТ")
-                                viewModel.budgetStudentsList.value.forEach { student ->
+                                item {
+                                    Text(modifier = Modifier.padding(8.dp), text = "БЮДЖЕТ")
+                                }
+                                items(viewModel.budgetStudentsList.value){ student ->
                                     StudentCard(
                                         modifier = Modifier.fillMaxWidth(),
                                         studentFullName = student.fullName,
                                         value = student.valueSum.value,
+                                        swipeableState = student.swipeableState,
                                         onCardClick = {
                                             navController.navigate(Screen.StudentScreen.withArgs("${student.studentID}"))
+                                        },
+                                        onDeleteStudentClick = {
+                                            viewModel.deleteStudent(student.studentID)
                                         }
                                     )
                                 }
                             }
                             if(viewModel.contractStudentsList.value.isNotEmpty()){
-                                Text(modifier = Modifier.padding(8.dp), text = "КОНТРАКТ")
-                                viewModel.contractStudentsList.value.forEach{ student ->
+                                item {
+                                    Text(modifier = Modifier.padding(8.dp), text = "КОНТРАКТ")
+                                }
+                                items(viewModel.contractStudentsList.value){ student ->
                                     StudentCard(
                                         modifier = Modifier.fillMaxWidth(),
                                         studentFullName = student.fullName,
                                         value = student.valueSum.value,
+                                        swipeableState = student.swipeableState,
                                         onCardClick = {
-                                            navController.navigate(route = Screen.StudentScreen.withArgs("${student.studentID}"))
+                                            navController.navigate(Screen.StudentScreen.withArgs("${student.studentID}"))
+                                        },
+                                        onDeleteStudentClick = {
+                                            viewModel.deleteStudent(student.studentID)
                                         }
                                     )
                                 }
