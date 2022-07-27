@@ -10,7 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.bogdan801.additionalpoints.data.util.getCurrentDate
+import com.bogdan801.additionalpoints.data.util.getCurrentDateAsString
 import com.bogdan801.additionalpoints.domain.model.ActivityInformation
 import com.bogdan801.additionalpoints.presentation.custom.composable.CustomButton
 import com.bogdan801.additionalpoints.presentation.custom.composable.CustomDropDownMenu
@@ -27,7 +27,7 @@ fun StudentActivityDialog(
     dialogType: StudentActivityIntention = StudentActivityIntention.Add,
     description: String = "",
     onDescriptionChanged: (newText: String) -> Unit = {},
-    date: String = getCurrentDate(),
+    date: String = getCurrentDateAsString(),
     onDateSelectClick: () -> Unit = {},
     activityInformationList: List<ActivityInformation> = listOf(),
     index: Int = 0,

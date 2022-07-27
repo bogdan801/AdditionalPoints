@@ -184,14 +184,14 @@ fun StudentScreen(
                     .padding(start = 8.dp, end = 8.dp, bottom = 70.dp)
                 ) {
                     Spacer(modifier = Modifier.height(4.dp))
-                    viewModel.uniqueMonths.forEach { month ->
+                    viewModel.monthStudentActivitiesMap.forEach { entry ->
                         MonthTitle(
                             modifier = Modifier.padding(horizontal = 4.dp),
-                            month = month,
-                            value = viewModel.getMonthSumValue(month)
+                            month = entry.key,
+                            value = viewModel.getMonthSumValue(entry.key)
                         )
 
-                        viewModel.monthStudentActivitiesMap[month]!!.forEach { activity ->
+                        entry.value.forEach { activity ->
                             StudentActivityCard(
                                 modifier = Modifier.padding(vertical = 4.dp),
                                 activity = activity,

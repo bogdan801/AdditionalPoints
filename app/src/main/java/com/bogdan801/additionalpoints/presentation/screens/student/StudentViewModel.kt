@@ -10,9 +10,9 @@ import androidx.lifecycle.viewModelScope
 import com.bogdan801.additionalpoints.data.mapper.toActivityInformation
 import com.bogdan801.additionalpoints.data.mapper.toStudent
 import com.bogdan801.additionalpoints.data.mapper.toStudentActivityEntity
-import com.bogdan801.additionalpoints.data.util.getCurrentDate
-import com.bogdan801.additionalpoints.data.util.toLocalDate
+import com.bogdan801.additionalpoints.data.util.getCurrentDateAsString
 import com.bogdan801.additionalpoints.domain.model.ActivityInformation
+import com.bogdan801.additionalpoints.domain.model.CurrentStudyYearBorders
 import com.bogdan801.additionalpoints.domain.model.Student
 import com.bogdan801.additionalpoints.domain.model.StudentActivity
 import com.bogdan801.additionalpoints.domain.repository.Repository
@@ -47,7 +47,7 @@ constructor(
         intention = StudentActivityIntention.Add
         showAddActivityDialogState.value = true
         _activityDescriptionState.value = ""
-        _selectedDateState.value = getCurrentDate()
+        _selectedDateState.value = getCurrentDateAsString()
         _selectedActivityIndexState.value = 0
         _valueState.value = activityInformationListState.value[_selectedActivityIndexState.value].value.toString().replace(',', '.')
         println()
@@ -71,7 +71,7 @@ constructor(
         _activityDescriptionState.value = newText
     }
 
-    private val _selectedDateState = mutableStateOf(getCurrentDate())
+    private val _selectedDateState = mutableStateOf(getCurrentDateAsString())
     val selectedDateState: State<String> = _selectedDateState
 
     fun onSelectDateClick(context: Context){
@@ -179,9 +179,6 @@ constructor(
     private val _studentState = mutableStateOf(Student(0, 0, "", false, mutableStateOf("")))
     val studentState: State<Student> = _studentState
 
-    var uniqueMonths: List<String> = listOf()
-        private set
-
     var monthStudentActivitiesMap: Map<String, List<StudentActivity>> = mapOf()
 
     fun getMonthSumValue(month: String) = monthStudentActivitiesMap[month]!!.sumOf { it.value.toDouble() }.toFloat()
@@ -193,16 +190,10 @@ constructor(
             repository.getStudentWithActivitiesJunctionByID(handle.get<Int>("studentID")!!).collect{ junction ->
                 if(!deleted){
                     _studentState.value = junction.toStudent(repository)
-                    _studentState.value.activities?.sortBy { toLocalDate(it.date) }
 
-                    uniqueMonths = _studentState.value.activities?.map {
-                        val parts = it.date.split('.')
-                        "${parts[1]}.${parts[2]}"
-                    }?.distinct() ?: listOf()
-
-                    monthStudentActivitiesMap = uniqueMonths.associateWith { month ->
-                        (_studentState.value.activities?.filter { it.date.contains(month) } ?: listOf())
-                    }
+                    monthStudentActivitiesMap = _studentState.value.getActivitiesByMonths(
+                        CurrentStudyYearBorders.defaultBorders
+                    )
                 }
             }
         }

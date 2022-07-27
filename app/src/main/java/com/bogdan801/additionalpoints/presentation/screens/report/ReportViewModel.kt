@@ -40,7 +40,7 @@ constructor(
     fun isMonthSelected(): Boolean {
         var isSelected = false
         monthsStatesMap.forEach{ entry ->
-            if(entry.value.value == true) isSelected = true
+            if(entry.value.value) isSelected = true
         }
         return isSelected
     }
@@ -53,7 +53,7 @@ constructor(
     private fun getSelectedGroupMonths(){
         viewModelScope.launch {
             val dates = repository.getAllDatesByGroup(selectedGroup.groupID).distinct().toMutableList()
-            dates.sortBy { toLocalDate(it) }
+            dates.sortBy { it.toLocalDate() }
             _uniqueGroupMonthsState.value = dates.map { date ->
                 val arr = date.split('.')
                 "${arr[1]}.${arr[2]}"

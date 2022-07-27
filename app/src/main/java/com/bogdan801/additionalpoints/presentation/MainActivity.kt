@@ -25,7 +25,6 @@ class MainActivity : ComponentActivity() {
 
         val launcher = createExcelURILauncher(this){
             workbookState.value.write(contentResolver.openOutputStream(it))
-
             Toast.makeText(this, "Файл було записано", Toast.LENGTH_LONG).show()
         }
 

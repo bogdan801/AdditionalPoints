@@ -9,6 +9,7 @@ import com.bogdan801.additionalpoints.data.util.getUkrainianMonthName
 import com.bogdan801.additionalpoints.domain.model.Student
 import com.bogdan801.additionalpoints.domain.model.StudentActivity
 import com.bogdan801.additionalpoints.domain.repository.Repository
+import kotlinx.coroutines.flow.first
 import org.apache.poi.ss.usermodel.*
 import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.ss.util.PropertyTemplate
@@ -29,7 +30,15 @@ suspend fun generateReport(months: List<String>, groupID: Int, repository: Repos
     return workbook
 }
 
-fun writeStudentToMonthSheet(rowIndex: Int, studentIndex: Int, student: Student, studentActivities: List<StudentActivity>, sheet: XSSFSheet, pt: PropertyTemplate, styles: List<XSSFCellStyle>): Int{
+fun writeStudentToMonthSheet(rowIndex: Int, studentIndex: Int, student: Student, sheet: XSSFSheet, pt: PropertyTemplate, styles: List<XSSFCellStyle>): Int{
+
+    val monthsMap = student.getActivitiesByMonths()
+
+
+
+
+    val studentActivities: List<StudentActivity> = student.activities?.toList() ?: listOf()
+
     if(studentActivities.isEmpty()) {
         val row = createRow(sheet, rowIndex , styles[0])
         createCell(row, 0, valueDouble = studentIndex.toDouble(), cellStyle = styles[0])
@@ -112,8 +121,12 @@ suspend fun createMonthSheet(workbook: XSSFWorkbook, month: String, groupID: Int
     createCell(titlesRow, 7, "Підпис студента",      cellStyle = styleMain)
     pt.drawBorders(CellRangeAddress(1,1,0,7), BorderStyle.THIN, BorderExtent.ALL)
 
+    //STUDENTS
+    val students = repository.getStudentWithActivitiesJunction().first().map { it.toStudent(repository) }.filter { student -> student.groupID == groupID}
+
     //STUDENT BUDGET TYPE TITLE
-    val budgetStudents = repository.getStudentsByGroupAndType(groupID, 0).map { it.toStudent() }
+    val budgetStudents = students.filter { !it.isContract }
+
     if(budgetStudents.isNotEmpty()){
         createCell(createRow(sheet, 2, styleMain), 0, "Студенти, які  навчаються за державним замовленням", cellStyle = styleMain)
         sheet.addMergedRegion(CellRangeAddress(2,2,0,7))
@@ -123,12 +136,11 @@ suspend fun createMonthSheet(workbook: XSSFWorkbook, month: String, groupID: Int
     //BUDGET STUDENTS LIST
     var rowIndex = 3
     budgetStudents.forEachIndexed { index, student ->
-        val studentActivities = repository.getGetStudentActivitiesByMonth(student.studentID, month).map { it.toStudentActivity(repository) }
-        rowIndex += writeStudentToMonthSheet(rowIndex, index + 1, student, studentActivities, sheet, pt, listOf(styleMain, styleSecond))
+        rowIndex += writeStudentToMonthSheet(rowIndex, index + 1, student, sheet, pt, listOf(styleMain, styleSecond))
     }
 
     //STUDENT CONTRACT TYPE TITLE
-    val contractStudents = repository.getStudentsByGroupAndType(groupID, 1).map { it.toStudent() }
+    val contractStudents = students.filter { it.isContract }
     if(contractStudents.isNotEmpty()){
         createCell(createRow(sheet, rowIndex, styleMain), 0, "Студенти, які  навчаються за умов договору", cellStyle = styleMain)
         sheet.addMergedRegion(CellRangeAddress(rowIndex,rowIndex,0,7))
@@ -138,8 +150,7 @@ suspend fun createMonthSheet(workbook: XSSFWorkbook, month: String, groupID: Int
 
     //CONTRACT STUDENTS LIST
     contractStudents.forEachIndexed { index, student ->
-        val studentActivities = repository.getGetStudentActivitiesByMonth(student.studentID, month).map { it.toStudentActivity(repository) }
-        rowIndex += writeStudentToMonthSheet(rowIndex, index + 1, student, studentActivities, sheet, pt, listOf(styleMain, styleSecond))
+        rowIndex += writeStudentToMonthSheet(rowIndex, index + 1, student, sheet, pt, listOf(styleMain, styleSecond))
     }
 
     //apply borders
