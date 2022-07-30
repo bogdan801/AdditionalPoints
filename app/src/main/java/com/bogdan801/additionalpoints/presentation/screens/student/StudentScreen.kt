@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -28,6 +29,7 @@ import com.bogdan801.additionalpoints.presentation.custom.composable.dialogbox.S
 import com.bogdan801.additionalpoints.presentation.custom.composable.drawer.DrawerMenuItem
 import com.bogdan801.additionalpoints.presentation.custom.composable.drawer.MenuDrawer
 import com.bogdan801.additionalpoints.presentation.navigation.Screen
+import com.bogdan801.additionalpoints.presentation.theme.AdditionalPointsTheme
 import kotlinx.coroutines.launch
 
 @Composable
@@ -184,7 +186,7 @@ fun StudentScreen(
                     .padding(start = 8.dp, end = 8.dp, bottom = 70.dp)
                 ) {
                     Spacer(modifier = Modifier.height(4.dp))
-                    viewModel.monthStudentActivitiesMap.forEach { entry ->
+                    viewModel.monthStudentActivitiesMap.value.forEach { entry ->
                         MonthTitle(
                             modifier = Modifier.padding(horizontal = 4.dp),
                             month = entry.key,

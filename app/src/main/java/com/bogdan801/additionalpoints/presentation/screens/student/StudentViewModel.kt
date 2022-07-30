@@ -2,15 +2,19 @@ package com.bogdan801.additionalpoints.presentation.screens.student
 
 import android.app.DatePickerDialog
 import android.content.Context
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bogdan801.additionalpoints.data.datastore.readIntFromDataStore
+import com.bogdan801.additionalpoints.data.datastore.readStringFromDataStore
 import com.bogdan801.additionalpoints.data.mapper.toActivityInformation
 import com.bogdan801.additionalpoints.data.mapper.toStudent
 import com.bogdan801.additionalpoints.data.mapper.toStudentActivityEntity
 import com.bogdan801.additionalpoints.data.util.getCurrentDateAsString
+import com.bogdan801.additionalpoints.di.BaseApplication
 import com.bogdan801.additionalpoints.domain.model.ActivityInformation
 import com.bogdan801.additionalpoints.domain.model.CurrentStudyYearBorders
 import com.bogdan801.additionalpoints.domain.model.Student
@@ -29,6 +33,10 @@ constructor(
     private val repository: Repository,
     handle: SavedStateHandle
 ): ViewModel() {
+    //APPLICATION
+    @Inject
+    lateinit var baseApp: BaseApplication
+
     //DELETE STUDENT DIALOG
     val showDeleteStudentDialogState = mutableStateOf(false)
 
@@ -179,9 +187,9 @@ constructor(
     private val _studentState = mutableStateOf(Student(0, 0, "", false, mutableStateOf("")))
     val studentState: State<Student> = _studentState
 
-    var monthStudentActivitiesMap: Map<String, List<StudentActivity>> = mapOf()
+    var monthStudentActivitiesMap: MutableState<Map<String, List<StudentActivity>>> = mutableStateOf(mapOf())
 
-    fun getMonthSumValue(month: String) = monthStudentActivitiesMap[month]!!.sumOf { it.value.toDouble() }.toFloat()
+    fun getMonthSumValue(month: String) = monthStudentActivitiesMap.value[month]!!.sumOf { it.value.toDouble() }.toFloat()
 
     val totalStudentValue get() = studentState.value.valueSum
 
@@ -191,8 +199,16 @@ constructor(
                 if(!deleted){
                     _studentState.value = junction.toStudent(repository)
 
-                    monthStudentActivitiesMap = _studentState.value.getActivitiesByMonths(
-                        CurrentStudyYearBorders.defaultBorders
+                    val context = baseApp as Context
+                    val areActivitiesShifted = context.readIntFromDataStore("isShifted") ?: 0
+                    var borders: CurrentStudyYearBorders? = null
+                    if (areActivitiesShifted == 1){
+                        val bordersString = context.readStringFromDataStore("borders") ?: CurrentStudyYearBorders.defaultBorders.toString()
+                        borders = CurrentStudyYearBorders.fromString(bordersString)
+                    }
+
+                    monthStudentActivitiesMap.value = _studentState.value.getActivitiesByMonths(
+                        borders
                     )
                 }
             }

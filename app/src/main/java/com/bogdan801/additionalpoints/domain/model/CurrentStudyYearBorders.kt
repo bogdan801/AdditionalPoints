@@ -6,10 +6,10 @@ import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.plus
 
 data class CurrentStudyYearBorders(
-    val firstSemesterStart: String,
-    val firstSemesterEnd: String,
-    val secondSemesterStart: String,
-    val secondSemesterEnd: String
+    var firstSemesterStart: String,
+    var firstSemesterEnd: String,
+    var secondSemesterStart: String,
+    var secondSemesterEnd: String
 ){
     override fun toString(): String {
         return "$firstSemesterStart-$firstSemesterEnd;$secondSemesterStart-$secondSemesterEnd"
@@ -17,8 +17,7 @@ data class CurrentStudyYearBorders(
 
     private fun isInFirstSemester(date: String): Boolean = isDateBetween(date, firstSemesterStart, firstSemesterEnd)
     private fun isInSecondSemester(date: String): Boolean = isDateBetween(date, secondSemesterStart, secondSemesterEnd)
-
-    fun isInTheBorders(date: String): Boolean = isInFirstSemester(date) || isInSecondSemester(date)
+    private fun isInTheBorders(date: String): Boolean = isInFirstSemester(date) || isInSecondSemester(date)
 
     fun getMonthInBorders(stringDate: String): String{
         val date = stringDate.toLocalDate()
@@ -48,7 +47,7 @@ data class CurrentStudyYearBorders(
                         "01.09.${currentDate.year}",
                         "24.12.${currentDate.year}",
                         "01.02.${currentDate.year+1}",
-                        "01.07.${currentDate.year+1}"
+                        "25.05.${currentDate.year+1}"
                     )
                 }
                 else {
@@ -56,7 +55,7 @@ data class CurrentStudyYearBorders(
                         "01.09.${currentDate.year-1}",
                         "24.12.${currentDate.year-1}",
                         "01.02.${currentDate.year}",
-                        "01.07.${currentDate.year}"
+                        "25.05.${currentDate.year}"
                     )
                 }
             }

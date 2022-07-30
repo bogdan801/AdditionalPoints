@@ -6,6 +6,7 @@ import com.bogdan801.additionalpoints.data.mapper.toStudent
 import com.bogdan801.additionalpoints.data.mapper.toStudentActivity
 import com.bogdan801.additionalpoints.data.util.getLastDateOfMonth
 import com.bogdan801.additionalpoints.data.util.getUkrainianMonthName
+import com.bogdan801.additionalpoints.domain.model.CurrentStudyYearBorders
 import com.bogdan801.additionalpoints.domain.model.Student
 import com.bogdan801.additionalpoints.domain.model.StudentActivity
 import com.bogdan801.additionalpoints.domain.repository.Repository
@@ -17,27 +18,22 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
-suspend fun generateReport(months: List<String>, groupID: Int, repository: Repository, additionalInfo: AdditionalReportInfo?): XSSFWorkbook{
+suspend fun generateReport(months: List<String>, groupID: Int, repository: Repository, additionalInfo: AdditionalReportInfo?, withGeneralSheet: Boolean = true): XSSFWorkbook{
     val workbook = XSSFWorkbook()
     months.forEach{ month ->
-        createMonthSheet(workbook, month, groupID, repository)
+        createMonthSheet(workbook, month, groupID, repository, additionalInfo)
     }
 
-    if(additionalInfo!=null){
+    if(additionalInfo!=null && withGeneralSheet){
         createGeneralSheet(workbook, months, groupID, repository, additionalInfo)
     }
 
     return workbook
 }
 
-fun writeStudentToMonthSheet(rowIndex: Int, studentIndex: Int, student: Student, sheet: XSSFSheet, pt: PropertyTemplate, styles: List<XSSFCellStyle>): Int{
-
-    val monthsMap = student.getActivitiesByMonths()
-
-
-
-
-    val studentActivities: List<StudentActivity> = student.activities?.toList() ?: listOf()
+fun writeStudentToMonthSheet(rowIndex: Int, month: String, studentIndex: Int, student: Student, sheet: XSSFSheet, pt: PropertyTemplate, styles: List<XSSFCellStyle>, borders: CurrentStudyYearBorders?): Int{
+    val monthsMap = student.getActivitiesByMonths(borders)
+    val studentActivities: List<StudentActivity> = monthsMap[month] ?: listOf()
 
     if(studentActivities.isEmpty()) {
         val row = createRow(sheet, rowIndex , styles[0])
@@ -73,7 +69,7 @@ fun writeStudentToMonthSheet(rowIndex: Int, studentIndex: Int, student: Student,
     return studentActivities.size
 }
 
-suspend fun createMonthSheet(workbook: XSSFWorkbook, month: String, groupID: Int, repository: Repository){
+suspend fun createMonthSheet(workbook: XSSFWorkbook, month: String, groupID: Int, repository: Repository, additionalInfo: AdditionalReportInfo?){
     val sheet = workbook.createSheet(getUkrainianMonthName(month))
     val pt = PropertyTemplate()
 
@@ -136,7 +132,7 @@ suspend fun createMonthSheet(workbook: XSSFWorkbook, month: String, groupID: Int
     //BUDGET STUDENTS LIST
     var rowIndex = 3
     budgetStudents.forEachIndexed { index, student ->
-        rowIndex += writeStudentToMonthSheet(rowIndex, index + 1, student, sheet, pt, listOf(styleMain, styleSecond))
+        rowIndex += writeStudentToMonthSheet(rowIndex, month, index + 1, student, sheet, pt, listOf(styleMain, styleSecond), additionalInfo?.borders)
     }
 
     //STUDENT CONTRACT TYPE TITLE
@@ -150,7 +146,7 @@ suspend fun createMonthSheet(workbook: XSSFWorkbook, month: String, groupID: Int
 
     //CONTRACT STUDENTS LIST
     contractStudents.forEachIndexed { index, student ->
-        rowIndex += writeStudentToMonthSheet(rowIndex, index + 1, student, sheet, pt, listOf(styleMain, styleSecond))
+        rowIndex += writeStudentToMonthSheet(rowIndex, month, index + 1, student, sheet, pt, listOf(styleMain, styleSecond), additionalInfo?.borders)
     }
 
     //apply borders
@@ -238,9 +234,12 @@ suspend fun createGeneralSheet(
         sheet.setColumnWidth(i,  10 * 256)
     }
 
+    //STUDENTS
+    val students = repository.getStudentWithActivitiesJunction().first().map { it.toStudent(repository) }.filter { student -> student.groupID == groupID}
+
     //STUDENT BUDGET TYPE TITLE
     var rowNumber = 2
-    val budgetStudents = repository.getStudentsByGroupAndType(groupID, 0).map { it.toStudent() }
+    val budgetStudents = students.filter { !it.isContract }
     if(budgetStudents.isNotEmpty()){
         createCell(createRow(sheet, rowNumber, styleRegular), 0, "Студенти, які  навчаються за державним замовленням", cellStyle = styleRegular)
         sheet.addMergedRegion(CellRangeAddress(rowNumber,rowNumber,0, colIndex))
@@ -248,14 +247,17 @@ suspend fun createGeneralSheet(
         rowNumber++
     }
 
+
+
     //BUDGET STUDENTS LIST
     budgetStudents.forEach { student ->
         val studentRow = createRow(sheet, rowNumber, styleRegularLeftAlign)
         createCell(studentRow, 0, student.fullName, cellStyle = styleRegularLeftAlign)
 
         var sum = 0.0
+        val studentMonthsMap = student.getActivitiesByMonths(additionalInfo.borders)
         months.forEachIndexed { index, month ->
-            val studentActivities = repository.getGetStudentActivitiesByMonth(student.studentID, month).map { it.toStudentActivity(repository) }
+            val studentActivities = studentMonthsMap[month] ?: listOf()
             val value = studentActivities.sumOf { it.value.toDouble() }
             createCell(studentRow, 1 + index, String.format("%.2f", value), cellStyle = styleRegular)
             sum += value
@@ -269,7 +271,7 @@ suspend fun createGeneralSheet(
     }
 
     //STUDENT CONTRACT TYPE TITLE
-    val contractStudents = repository.getStudentsByGroupAndType(groupID, 1).map { it.toStudent() }
+    val contractStudents = students.filter { it.isContract }
     if(contractStudents.isNotEmpty()){
         createCell(createRow(sheet, rowNumber, styleRegular), 0, "Студенти, які  навчаються за умов договору", cellStyle = styleRegular)
         sheet.addMergedRegion(CellRangeAddress(rowNumber,rowNumber,0,colIndex))
@@ -283,8 +285,9 @@ suspend fun createGeneralSheet(
         createCell(studentRow, 0, student.fullName, cellStyle = styleRegularLeftAlign)
 
         var sum = 0.0
+        val studentMonthsMap = student.getActivitiesByMonths(additionalInfo.borders)
         months.forEachIndexed { index, month ->
-            val studentActivities = repository.getGetStudentActivitiesByMonth(student.studentID, month).map { it.toStudentActivity(repository) }
+            val studentActivities = studentMonthsMap[month] ?: listOf()
             val value = studentActivities.sumOf { it.value.toDouble() }
             createCell(studentRow, 1 + index, String.format("%.2f", value), cellStyle = styleRegular)
             sum += value

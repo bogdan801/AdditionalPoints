@@ -122,14 +122,14 @@ fun ReportScreen(
                                         viewModel.headOfGroupState.value.isNotBlank() &&
                                         viewModel.curatorState.value.isNotBlank()
                                     ){
-                                        viewModel.onGenerateReportClick(launcher, workbook)
+                                        viewModel.onGenerateReportClick(launcher, workbook, context)
                                     }
                                     else{
                                         Toast.makeText(context, "Спочатку заповніть всі поля!", Toast.LENGTH_LONG).show()
                                     }
                                 }
                                 else{
-                                    viewModel.onGenerateReportClick(launcher, workbook)
+                                    viewModel.onGenerateReportClick(launcher, workbook, context)
                                 }
                             }
                         ) {

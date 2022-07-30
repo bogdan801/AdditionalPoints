@@ -48,3 +48,9 @@ fun getMonthFromDate(date: String): String {
     val d = date.toLocalDate()
     return "${d.monthNumber.toString().padStart(2, '0')}.${d.year}"
 }
+
+fun sortMonthList(months: MutableList<String>): MutableList<String>{
+    val dates: MutableList<LocalDate> = months.map {"01.$it".toLocalDate() }.toMutableList()
+    dates.sort()
+    return dates.map { getMonthFromDate(it.asFormattedString()) }.toMutableList()
+}

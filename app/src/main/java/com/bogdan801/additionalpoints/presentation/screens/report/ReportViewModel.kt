@@ -1,18 +1,25 @@
 package com.bogdan801.additionalpoints.presentation.screens.report
 
+import android.content.Context
 import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bogdan801.additionalpoints.data.datastore.readIntFromDataStore
+import com.bogdan801.additionalpoints.data.datastore.readStringFromDataStore
 import com.bogdan801.additionalpoints.data.excel.report.AdditionalReportInfo
 import com.bogdan801.additionalpoints.data.excel.report.Degree
 import com.bogdan801.additionalpoints.data.mapper.toGroup
-import com.bogdan801.additionalpoints.data.util.toLocalDate
+import com.bogdan801.additionalpoints.data.mapper.toStudent
+import com.bogdan801.additionalpoints.data.util.sortMonthList
+import com.bogdan801.additionalpoints.di.BaseApplication
+import com.bogdan801.additionalpoints.domain.model.CurrentStudyYearBorders
 import com.bogdan801.additionalpoints.domain.model.Group
 import com.bogdan801.additionalpoints.domain.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import javax.inject.Inject
@@ -23,6 +30,10 @@ class ReportViewModel
 constructor(
     private val repository: Repository
 ): ViewModel() {
+    //APPLICATION
+    @Inject
+    lateinit var baseApp: BaseApplication
+
     //DATA
     private val _selectedGroupIndexState =  mutableStateOf(0)
     val selectedGroupIndexState: State<Int> =  _selectedGroupIndexState
@@ -51,13 +62,28 @@ constructor(
     }
 
     private fun getSelectedGroupMonths(){
+        val context = baseApp as Context
         viewModelScope.launch {
-            val dates = repository.getAllDatesByGroup(selectedGroup.groupID).distinct().toMutableList()
-            dates.sortBy { it.toLocalDate() }
-            _uniqueGroupMonthsState.value = dates.map { date ->
-                val arr = date.split('.')
-                "${arr[1]}.${arr[2]}"
-            }.distinct()
+            val areActivitiesShifted = context.readIntFromDataStore("isShifted") ?: 0
+            var borders: CurrentStudyYearBorders? = null
+            if (areActivitiesShifted == 1){
+                val bordersString = context.readStringFromDataStore("borders") ?: CurrentStudyYearBorders.defaultBorders.toString()
+                borders = CurrentStudyYearBorders.fromString(bordersString)
+            }
+
+            val students = repository.getStudentWithActivitiesJunction().first().map { it.toStudent(repository) }.filter { student -> student.groupID == selectedGroup.groupID}
+
+            val listOfMonth: MutableList<String> = mutableListOf()
+            students.forEach { student ->
+                val activitiesMap = student.getActivitiesByMonths(borders)
+                //val activitiesMap = student.getActivitiesByMonths(CurrentStudyYearBorders.defaultBorders)
+                activitiesMap.keys.forEach { month ->
+                    if(!listOfMonth.contains(month)) listOfMonth.add(month)
+                }
+            }
+
+            _uniqueGroupMonthsState.value = sortMonthList(listOfMonth)
+
             monthsStatesMap = _uniqueGroupMonthsState.value.associateWith {
                 mutableStateOf(true)
             }
@@ -132,11 +158,19 @@ constructor(
     }
 
     //GENERATE REPORT
-    fun onGenerateReportClick(launcher: ActivityResultLauncher<String>, workbook: MutableState<XSSFWorkbook>){
+    fun onGenerateReportClick(launcher: ActivityResultLauncher<String>, workbook: MutableState<XSSFWorkbook>, context: Context){
         viewModelScope.launch {
+            val areActivitiesShifted = context.readIntFromDataStore("isShifted") ?: 0
+            var borders: CurrentStudyYearBorders? = null
+            if (areActivitiesShifted == 1){
+                val bordersString = context.readStringFromDataStore("borders") ?: CurrentStudyYearBorders.defaultBorders.toString()
+                borders = CurrentStudyYearBorders.fromString(bordersString)
+            }
             workbook.value = repository.generateReportWorkbook(
                 months = uniqueGroupMonthsState.value.filter { monthsStatesMap[it]?.value == true }, selectedGroup.groupID,
-                additionalInfo = if(_generalState.value) AdditionalReportInfo(Degree.values()[degreeIndexState.value], courseState.value, facultyState.value, headOfGroupState.value, curatorState.value) else null
+                //additionalInfo = AdditionalReportInfo(Degree.values()[degreeIndexState.value], courseState.value, facultyState.value, headOfGroupState.value, curatorState.value, CurrentStudyYearBorders.defaultBorders),
+                additionalInfo = AdditionalReportInfo(Degree.values()[degreeIndexState.value], courseState.value, facultyState.value, headOfGroupState.value, curatorState.value, borders),
+                withGeneralSheet = _generalState.value
             )
 
             launcher.launch("Звіт.xlsx")

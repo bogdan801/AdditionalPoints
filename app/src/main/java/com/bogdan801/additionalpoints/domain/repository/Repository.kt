@@ -49,5 +49,5 @@ interface Repository {
     suspend fun getGetStudentActivitiesByMonth(studentID: Int, month: String): List<StudentActivityEntity>
 
     //generate exel report
-    suspend fun generateReportWorkbook(months: List<String>, groupID: Int, additionalInfo: AdditionalReportInfo?): XSSFWorkbook
+    suspend fun generateReportWorkbook(months: List<String>, groupID: Int, additionalInfo: AdditionalReportInfo?, withGeneralSheet: Boolean): XSSFWorkbook
 }

@@ -130,5 +130,5 @@ class RepositoryImpl(
     override suspend fun getGetStudentActivitiesByMonth(studentID: Int, month: String): List<StudentActivityEntity> = dbDao.getGetStudentActivitiesByMonth(studentID, month)
 
     //generate exel report
-    override suspend fun generateReportWorkbook(months: List<String>, groupID: Int, additionalInfo: AdditionalReportInfo?): XSSFWorkbook = generateReport(months, groupID, this, additionalInfo)
+    override suspend fun generateReportWorkbook(months: List<String>, groupID: Int, additionalInfo: AdditionalReportInfo?, withGeneralSheet: Boolean): XSSFWorkbook = generateReport(months, groupID, this, additionalInfo, withGeneralSheet)
 }

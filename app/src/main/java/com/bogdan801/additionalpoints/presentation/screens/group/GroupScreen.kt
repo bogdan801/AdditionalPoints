@@ -7,28 +7,29 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import com.bogdan801.additionalpoints.R
 import com.bogdan801.additionalpoints.presentation.custom.composable.*
 import com.bogdan801.additionalpoints.presentation.custom.composable.dialogbox.AddGroupDialog
 import com.bogdan801.additionalpoints.presentation.custom.composable.dialogbox.AddStudentDialog
 import com.bogdan801.additionalpoints.presentation.custom.composable.dialogbox.DeleteGroupDialog
+import com.bogdan801.additionalpoints.presentation.custom.composable.dialogbox.SettingsDialog
 import com.bogdan801.additionalpoints.presentation.custom.composable.drawer.DrawerMenuItem
 import com.bogdan801.additionalpoints.presentation.custom.composable.drawer.MenuDrawer
 import com.bogdan801.additionalpoints.presentation.navigation.Screen
+import com.bogdan801.additionalpoints.presentation.theme.AdditionalPointsTheme
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -61,6 +62,15 @@ fun GroupScreen(
                         text = "NULES",
                         style = MaterialTheme.typography.h1
                     )
+                },
+                action = {
+                    IconButton(
+                        onClick = {
+                            viewModel.openSettingsDialog(context)
+                        }
+                    ) {
+                        Icon(imageVector = Icons.Default.Settings, contentDescription = "Settings")
+                    }
                 }
             )
         },
@@ -175,6 +185,19 @@ fun GroupScreen(
                 }
             }
         )
+
+        //settings dialog box
+        SettingsDialog(
+            showDialogState = viewModel.showSettingsDialogState,
+            allowShiftActivities = viewModel.allowShiftState.value,
+            borders = viewModel.yearBordersState.value,
+            onCheckBoxClick = {viewModel.onAllowShiftSwitchClicked(context)},
+            onSelectFirstSemesterStartClick = {viewModel.onSelectFirstSemesterStartClick(context)},
+            onSelectFirstSemesterEndClick = {viewModel.onSelectFirstSemesterEndClick(context)},
+            onSelectSecondSemesterStartClick = {viewModel.onSelectSecondSemesterStartClick(context)},
+            onSelectSecondSemesterEndClick = {viewModel.onSelectSecondSemesterEndClick(context)}
+        )
+
 
         //contents of the screen
         Column(modifier = Modifier

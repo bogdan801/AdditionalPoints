@@ -1,18 +1,27 @@
 package com.bogdan801.additionalpoints.presentation.screens.group
 
+import android.app.DatePickerDialog
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bogdan801.additionalpoints.data.datastore.readStringFromDataStore
+import com.bogdan801.additionalpoints.data.datastore.saveIntToDataStore
+import com.bogdan801.additionalpoints.data.datastore.saveStringToDataStore
 import com.bogdan801.additionalpoints.data.mapper.toGroup
 import com.bogdan801.additionalpoints.data.mapper.toGroupEntity
 import com.bogdan801.additionalpoints.data.mapper.toStudentEntity
+import com.bogdan801.additionalpoints.data.util.toLocalDate
+import com.bogdan801.additionalpoints.domain.model.CurrentStudyYearBorders
 import com.bogdan801.additionalpoints.domain.model.Group
 import com.bogdan801.additionalpoints.domain.model.Student
 import com.bogdan801.additionalpoints.domain.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -117,6 +126,126 @@ constructor(
             selectNewGroup(_selectedGroupIndexState.value)
         }
     }
+
+    //SETTINGS DIALOG
+    val showSettingsDialogState = mutableStateOf(false)
+
+    fun openSettingsDialog(context: Context){
+        viewModelScope.launch {
+            val borders = context.readStringFromDataStore("borders")
+            if(context.readStringFromDataStore("borders") == null){
+                context.saveStringToDataStore("borders", CurrentStudyYearBorders.defaultBorders.toString())
+                _yearBordersState.value = CurrentStudyYearBorders.defaultBorders
+            }
+            else{
+                _yearBordersState.value = CurrentStudyYearBorders.fromString(borders!!)
+                println()
+            }
+        }
+        showSettingsDialogState.value = true
+    }
+
+    private val _allowShiftState = mutableStateOf(false)
+    val allowShiftState: State<Boolean> = _allowShiftState
+
+    private val _yearBordersState = mutableStateOf(CurrentStudyYearBorders.defaultBorders)
+    val yearBordersState: State<CurrentStudyYearBorders> = _yearBordersState
+
+    fun onAllowShiftSwitchClicked(context: Context){
+        _allowShiftState.value = !_allowShiftState.value
+        if(_allowShiftState.value){
+            viewModelScope.launch {
+                context.saveIntToDataStore("isShifted", 1)
+            }
+        }
+        else {
+            viewModelScope.launch {
+                context.saveIntToDataStore("isShifted", 0)
+            }
+        }
+    }
+
+    fun onSelectFirstSemesterStartClick(context: Context){
+        val arr = _yearBordersState.value.firstSemesterStart.split('.')
+        val startYear = arr[2].toInt()
+        val startMonth = arr[1].toInt()-1
+        val startDay = arr[0].toInt()
+
+        DatePickerDialog(context, { _, year, month, day ->
+            val date = LocalDate(year = year, monthNumber = month+1, dayOfMonth = day)
+            if(date >= _yearBordersState.value.firstSemesterEnd.toLocalDate()){
+                Toast.makeText(context, "Дата початку першого семестру не може бути пізніша за дату його кінця", Toast.LENGTH_SHORT).show()
+            }
+            else{
+                _yearBordersState.value = _yearBordersState.value.copy(firstSemesterStart = "${day.toString().padStart(2, '0')}.${(month+1).toString().padStart(2, '0')}.${year}")
+                viewModelScope.launch{
+                    context.saveStringToDataStore("borders", _yearBordersState.value.toString())
+                }
+            }
+        }, startYear, startMonth, startDay).show()
+    }
+
+    fun onSelectFirstSemesterEndClick(context: Context){
+        val arr = _yearBordersState.value.firstSemesterEnd.split('.')
+        val startYear = arr[2].toInt()
+        val startMonth = arr[1].toInt()-1
+        val startDay = arr[0].toInt()
+
+        DatePickerDialog(context, { _, year, month, day ->
+            val date = LocalDate(year = year, monthNumber = month+1, dayOfMonth = day)
+            if(date <= _yearBordersState.value.firstSemesterStart.toLocalDate() || date >= _yearBordersState.value.secondSemesterStart.toLocalDate()){
+                Toast.makeText(context, "Дата кінця першого семестру має бути пізніша за початок першого семестру та раніша за початок другого", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                _yearBordersState.value = _yearBordersState.value.copy(firstSemesterEnd = "${day.toString().padStart(2, '0')}.${(month+1).toString().padStart(2, '0')}.${year}")
+                viewModelScope.launch{
+                    context.saveStringToDataStore("borders", _yearBordersState.value.toString())
+                }
+            }
+        }, startYear, startMonth, startDay).show()
+    }
+
+    fun onSelectSecondSemesterStartClick(context: Context){
+        val arr = _yearBordersState.value.secondSemesterStart.split('.')
+        val startYear = arr[2].toInt()
+        val startMonth = arr[1].toInt()-1
+        val startDay = arr[0].toInt()
+
+        DatePickerDialog(context, { _, year, month, day ->
+            val date = LocalDate(year = year, monthNumber = month+1, dayOfMonth = day)
+            if(date <= _yearBordersState.value.firstSemesterEnd.toLocalDate() || date >= _yearBordersState.value.secondSemesterEnd.toLocalDate()){
+                Toast.makeText(context, "Дата початку другого семестру має бути пізніша за кінець першого семестру та раніша за кінець другого", Toast.LENGTH_SHORT).show()
+            }
+            else{
+                _yearBordersState.value = _yearBordersState.value.copy(secondSemesterStart = "${day.toString().padStart(2, '0')}.${(month+1).toString().padStart(2, '0')}.${year}")
+                viewModelScope.launch{
+                    context.saveStringToDataStore("borders", _yearBordersState.value.toString())
+                }
+            }
+
+        }, startYear, startMonth, startDay).show()
+    }
+
+    fun onSelectSecondSemesterEndClick(context: Context){
+        val arr = _yearBordersState.value.secondSemesterEnd.split('.')
+        val startYear = arr[2].toInt()
+        val startMonth = arr[1].toInt()-1
+        val startDay = arr[0].toInt()
+
+        DatePickerDialog(context, { _, year, month, day ->
+            val date = LocalDate(year = year, monthNumber = month+1, dayOfMonth = day)
+            if(date <= _yearBordersState.value.secondSemesterStart.toLocalDate()){
+                Toast.makeText(context, "Дата кінця другого семестру не може бути раніша за дату його початку", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                _yearBordersState.value = _yearBordersState.value.copy(secondSemesterEnd = "${day.toString().padStart(2, '0')}.${(month+1).toString().padStart(2, '0')}.${year}")
+                viewModelScope.launch{
+                    context.saveStringToDataStore("borders", _yearBordersState.value.toString())
+                }
+            }
+        }, startYear, startMonth, startDay).show()
+    }
+
     init {
         viewModelScope.launch {
             repository.getGroupWithStudentsJunction().collect { list ->
@@ -138,5 +267,6 @@ constructor(
                 }
             }
         }
+
     }
 }
