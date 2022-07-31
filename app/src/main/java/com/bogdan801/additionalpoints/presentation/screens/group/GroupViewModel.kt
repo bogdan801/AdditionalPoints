@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bogdan801.additionalpoints.R
+import com.bogdan801.additionalpoints.data.datastore.readIntFromDataStore
 import com.bogdan801.additionalpoints.data.datastore.readStringFromDataStore
 import com.bogdan801.additionalpoints.data.datastore.saveIntToDataStore
 import com.bogdan801.additionalpoints.data.datastore.saveStringToDataStore
@@ -132,6 +133,8 @@ constructor(
 
     fun openSettingsDialog(context: Context){
         viewModelScope.launch {
+            _allowShiftState.value = (context.readIntFromDataStore("isShifted") ?: 0) != 0
+
             val borders = context.readStringFromDataStore("borders")
             if(context.readStringFromDataStore("borders") == null){
                 context.saveStringToDataStore("borders", CurrentStudyYearBorders.defaultBorders.toString())
