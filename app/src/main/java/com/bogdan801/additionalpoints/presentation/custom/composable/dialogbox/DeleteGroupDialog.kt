@@ -6,9 +6,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.bogdan801.additionalpoints.presentation.custom.composable.CustomButton
+import com.bogdan801.additionalpoints.R
 
 @Composable
 fun DeleteGroupDialog(
@@ -19,7 +21,7 @@ fun DeleteGroupDialog(
 ) {
     BasicDialogBox(
         isDialogOpen = showDialogState,
-        title = "Видалити"
+        title = stringResource(id = R.string.delete)
     ){
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -29,24 +31,28 @@ fun DeleteGroupDialog(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 CustomButton(
-                    modifier= Modifier.width(150.dp).height(55.dp),
+                    modifier= Modifier
+                        .width(150.dp)
+                        .height(55.dp),
                     onClick = {
                         onDeleteGroupClick()
                         showDialogState.value = false
                     },
                     isOutlined = true
                 ) {
-                    Text(text = "Групу", textAlign = TextAlign.Center)
+                    Text(text = stringResource(id = R.string.group), textAlign = TextAlign.Center)
                 }
                 Spacer(modifier = Modifier.width(8.dp))
                 CustomButton(
-                    modifier= Modifier.width(150.dp).height(55.dp),
+                    modifier= Modifier
+                        .width(150.dp)
+                        .height(55.dp),
                     onClick = {
                         onDeleteGroupActivitiesClick()
                         showDialogState.value = false
                     },
                     isOutlined = true) {
-                    Text(text = "Бали студентів", textAlign = TextAlign.Center)
+                    Text(text = stringResource(id = R.string.student_activities), textAlign = TextAlign.Center)
                 }
             }
             CustomButton(
@@ -56,7 +62,7 @@ fun DeleteGroupDialog(
                     showDialogState.value = false
                 }
             ) {
-                Text(text = "Скасувати", textAlign = TextAlign.Center)
+                Text(text = stringResource(id = R.string.cancel), textAlign = TextAlign.Center)
             }
             Spacer(modifier = Modifier.height(16.dp))
         }

@@ -8,8 +8,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.bogdan801.additionalpoints.R
 import com.bogdan801.additionalpoints.data.util.getCurrentDateAsString
 import com.bogdan801.additionalpoints.domain.model.ActivityInformation
 import com.bogdan801.additionalpoints.presentation.custom.composable.CustomButton
@@ -38,14 +40,14 @@ fun StudentActivityDialog(
 ) {
     BasicDialogBox(
         isDialogOpen = showDialogState,
-        title = if(dialogType == StudentActivityIntention.Add) "Додавання балу" else "Оновлення балу"
+        title = if(dialogType == StudentActivityIntention.Add) stringResource(id = R.string.adding_activity) else stringResource(id = R.string.updating_activity)
     ){
         Column(modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)) {
             Text(
                 modifier = Modifier.padding(start = 4.dp),
-                text = "Захід",
+                text = stringResource(id = R.string.event),
                 style = MaterialTheme.typography.h2,
                 color = MaterialTheme.colors.secondaryVariant
             )
@@ -56,11 +58,11 @@ fun StudentActivityDialog(
                     .height(45.dp),
                 value = description,
                 onValueChanged = onDescriptionChanged,
-                placeholder = "Назва заходу"
+                placeholder = stringResource(id = R.string.event_name)
             )
             Text(
                 modifier = Modifier.padding(start = 4.dp),
-                text = "Дата проведення",
+                text = stringResource(id = R.string.date_of_the_event),
                 style = MaterialTheme.typography.h2,
                 color = MaterialTheme.colors.secondaryVariant
             )
@@ -76,7 +78,7 @@ fun StudentActivityDialog(
             }
             Text(
                 modifier = Modifier.padding(start = 4.dp),
-                text = "Тип заходу",
+                text = stringResource(id = R.string.event_type),
                 style = MaterialTheme.typography.h2,
                 color = MaterialTheme.colors.secondaryVariant
             )
@@ -99,7 +101,7 @@ fun StudentActivityDialog(
             ) {
                 Text(
                     modifier = Modifier.padding(start = 4.dp, end = 8.dp),
-                    text = "Бал",
+                    text = stringResource(id = R.string.value),
                     style = MaterialTheme.typography.h2,
                     color = MaterialTheme.colors.secondaryVariant
                 )
@@ -125,10 +127,9 @@ fun StudentActivityDialog(
                     modifier = Modifier.height(45.dp),
                     onClick = onSaveActivityClick
                 ) {
-                    Text(text = "Зберегти", color = MaterialTheme.colors.onSecondary)
+                    Text(text = stringResource(id = R.string.save), color = MaterialTheme.colors.onSecondary)
                 }
             }
-
         }
     }
 }

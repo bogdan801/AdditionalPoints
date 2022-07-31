@@ -14,8 +14,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -29,7 +29,6 @@ import com.bogdan801.additionalpoints.presentation.custom.composable.dialogbox.S
 import com.bogdan801.additionalpoints.presentation.custom.composable.drawer.DrawerMenuItem
 import com.bogdan801.additionalpoints.presentation.custom.composable.drawer.MenuDrawer
 import com.bogdan801.additionalpoints.presentation.navigation.Screen
-import com.bogdan801.additionalpoints.presentation.theme.AdditionalPointsTheme
 import kotlinx.coroutines.launch
 
 @Composable
@@ -78,10 +77,10 @@ fun StudentScreen(
             //side drawer
             MenuDrawer(
                 headerIconPainter = painterResource(id = R.drawable.ic_nubip_foreground),
-                headerTitle = "НУБІП. Додаткові бали"
+                headerTitle = stringResource(id = R.string.title_of_drawer)
             ){
                 DrawerMenuItem(
-                    description = "Головна",
+                    description = stringResource(id = R.string.main_drawer_item),
                     iconImageVector = Icons.Default.Home,
                     iconTint = MaterialTheme.colors.secondary,
                     onItemClick = {
@@ -92,7 +91,7 @@ fun StudentScreen(
                     }
                 )
                 DrawerMenuItem(
-                    description = "Генерація звіту",
+                    description = stringResource(id = R.string.report_drawer_item),
                     iconPainter = painterResource(id = R.drawable.baseline_description_24),
                     onItemClick = {
                         scope.launch {
@@ -102,7 +101,7 @@ fun StudentScreen(
                     }
                 )
                 DrawerMenuItem(
-                    description = "Довідка",
+                    description = stringResource(id = R.string.report_drawer_item),
                     iconImageVector = Icons.Default.Info,
                     onItemClick = {
                         scope.launch {
@@ -160,10 +159,10 @@ fun StudentScreen(
             onSaveActivityClick = {
                 if(viewModel.activityDescriptionState.value.isNotBlank() && viewModel.valueState.value.isNotBlank()){
                     viewModel.saveStudentActivity(viewModel.intention)
-                    Toast.makeText(context, "Запис збережено", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, context.getText(R.string.entrie_saved), Toast.LENGTH_SHORT).show()
                 }
                 else{
-                    Toast.makeText(context, "Спочатку введіть дані!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, context.getText(R.string.fill_the_data_first), Toast.LENGTH_SHORT).show()
                 }
             }
         )
@@ -172,7 +171,7 @@ fun StudentScreen(
         DeleteStudentDialog(
             showDialogState = viewModel.showDeleteStudentDialogState,
             onDeleteStudentClick = {
-                Toast.makeText(context, "Студента видалено", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getText(R.string.student_deleted), Toast.LENGTH_SHORT).show()
                 viewModel.deleteStudent()
                 navController.popBackStack()
             }
@@ -202,7 +201,7 @@ fun StudentScreen(
                                 },
                                 onDeleteActivityClick = {
                                     viewModel.deleteActivityClick(activity.studActID)
-                                    Toast.makeText(context, "Запис видалено", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, context.getText(R.string.entrie_deleted), Toast.LENGTH_SHORT).show()
                                 }
                             )
                         }
@@ -213,11 +212,10 @@ fun StudentScreen(
             else{
                 Text(
                     modifier = Modifier.align(Alignment.Center),
-                    text = "Внесіть дані",
+                    text = stringResource(id = R.string.fill_data),
                     color = MaterialTheme.colors.secondaryVariant
                 )
             }
-
 
             TotalStudentValueCard(
                 modifier = Modifier

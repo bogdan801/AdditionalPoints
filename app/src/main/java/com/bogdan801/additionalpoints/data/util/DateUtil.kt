@@ -20,6 +20,22 @@ fun getUkrainianMonthName(month: String): String = when(month.split('.')[0].toIn
     else -> ""
 } + " " + month.split('.')[1]
 
+fun getEnglishMonthName(month: String): String = when(month.split('.')[0].toInt()) {
+    1 -> "January"
+    2 -> "February"
+    3 -> "March"
+    4 -> "April"
+    5 -> "May"
+    6 -> "June"
+    7 -> "July"
+    8 -> "August"
+    9 -> "September"
+    10 -> "October"
+    11 -> "November"
+    12 -> "December"
+    else -> ""
+} + " " + month.split('.')[1]
+
 fun getLastDateOfMonth(month: String): String {
     val arr = month.split('.')
     return YearMonth.of(arr[1].toInt(),arr[0].toInt()).atEndOfMonth().dayOfMonth.toString()

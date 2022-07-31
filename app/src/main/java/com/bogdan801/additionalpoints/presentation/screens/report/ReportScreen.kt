@@ -20,13 +20,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.bogdan801.additionalpoints.R
 import com.bogdan801.additionalpoints.data.excel.report.Degree
+import com.bogdan801.additionalpoints.data.util.getEnglishMonthName
 import com.bogdan801.additionalpoints.data.util.getUkrainianMonthName
 import com.bogdan801.additionalpoints.presentation.custom.composable.*
 import com.bogdan801.additionalpoints.presentation.custom.composable.drawer.DrawerMenuItem
@@ -45,6 +48,8 @@ fun ReportScreen(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
+    val locale = Locale.current
+
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
@@ -64,7 +69,7 @@ fun ReportScreen(
                 title = {
                     Text(
                         modifier = Modifier.align(Alignment.Center),
-                        text = "Звіт",
+                        text = stringResource(id = R.string.report),
                         style = MaterialTheme.typography.h2
                     )
                 }
@@ -74,10 +79,10 @@ fun ReportScreen(
             //side drawer
             MenuDrawer(
                 headerIconPainter = painterResource(id = R.drawable.ic_nubip_foreground),
-                headerTitle = "НУБІП. Додаткові бали"
+                headerTitle = stringResource(id = R.string.title_of_drawer)
             ){
                 DrawerMenuItem(
-                    description = "Головна",
+                    description = stringResource(id = R.string.main_drawer_item),
                     iconImageVector = Icons.Default.Home,
                     onItemClick = {
                         scope.launch {
@@ -87,7 +92,7 @@ fun ReportScreen(
                     }
                 )
                 DrawerMenuItem(
-                    description = "Генерація звіту",
+                    description = stringResource(id = R.string.report_drawer_item),
                     iconPainter = painterResource(id = R.drawable.baseline_description_24),
                     iconTint = MaterialTheme.colors.secondary,
                     onItemClick = {
@@ -97,7 +102,7 @@ fun ReportScreen(
                     }
                 )
                 DrawerMenuItem(
-                    description = "Довідка",
+                    description = stringResource(id = R.string.info_drawer_item),
                     iconImageVector = Icons.Default.Info,
                     onItemClick = {
                         scope.launch {
@@ -125,7 +130,7 @@ fun ReportScreen(
                                         viewModel.onGenerateReportClick(launcher, workbook, context)
                                     }
                                     else{
-                                        Toast.makeText(context, "Спочатку заповніть всі поля!", Toast.LENGTH_LONG).show()
+                                        Toast.makeText(context, context.getText(R.string.fill_all_fields), Toast.LENGTH_LONG).show()
                                     }
                                 }
                                 else{
@@ -133,7 +138,7 @@ fun ReportScreen(
                                 }
                             }
                         ) {
-                            Text(text = "Згенерувати", color = MaterialTheme.colors.onSecondary)
+                            Text(text = stringResource(id = R.string.generate), color = MaterialTheme.colors.onSecondary)
                         }
                     }
                 }
@@ -145,7 +150,7 @@ fun ReportScreen(
             GroupSelector(
                 data = viewModel.groupListState.value.map { it.name },
                 onGroupSelected = { index, _ ->
-                    viewModel.selectGroup(index)
+                    viewModel.selectGroup(index, context)
                 },
                 index = viewModel.selectedGroupIndexState.value,
                 showButtons = false
@@ -156,7 +161,7 @@ fun ReportScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 8.dp),
-                        text = "Оберіть місяці",
+                        text = stringResource(id = R.string.choose_month),
                         color = MaterialTheme.colors.secondaryVariant,
                         textAlign = TextAlign.Center
                     )
@@ -182,7 +187,7 @@ fun ReportScreen(
                                     contentAlignment = Alignment.CenterStart
                                 ) {
                                     Text(
-                                        text = getUkrainianMonthName(month).lowercase(),
+                                        text = if(locale == Locale("en-US")) getEnglishMonthName(month).lowercase() else getUkrainianMonthName(month).lowercase(),
                                         color = MaterialTheme.colors.secondaryVariant
                                     )
                                     Checkbox(
@@ -216,7 +221,7 @@ fun ReportScreen(
                                     contentAlignment = Alignment.CenterStart
                                 ) {
                                     Text(
-                                        text = "загальний",
+                                        text = stringResource(id = R.string.general),
                                         color = MaterialTheme.colors.secondaryVariant
                                     )
                                     Checkbox(
@@ -257,7 +262,7 @@ fun ReportScreen(
                                 ) {
                                     Text(
                                         modifier = Modifier.padding(start = 4.dp),
-                                        text = "Освітній ступінь",
+                                        text = stringResource(id = R.string.degree),
                                         style = MaterialTheme.typography.h2,
                                         color = MaterialTheme.colors.secondaryVariant
                                     )
@@ -266,7 +271,7 @@ fun ReportScreen(
                                             .fillMaxWidth()
                                             .padding(vertical = 4.dp)
                                             .height(45.dp),
-                                        data = Degree.values().map{ it.degreeName },
+                                        data = Degree.values().map{ if(locale == Locale("en-US")) it.degreeNameEng else it.degreeName },
                                         index = viewModel.degreeIndexState.value,
                                         onItemSelected = { index, _ ->
                                             viewModel.degreeIndexSelected(index)
@@ -274,7 +279,7 @@ fun ReportScreen(
                                     )
                                     Text(
                                         modifier = Modifier.padding(start = 4.dp),
-                                        text = "Курс",
+                                        text = stringResource(id = R.string.study_year),
                                         style = MaterialTheme.typography.h2,
                                         color = MaterialTheme.colors.secondaryVariant
                                     )
@@ -290,11 +295,11 @@ fun ReportScreen(
                                         onValueChanged = {
                                             viewModel.courseTextChanged(it)
                                         },
-                                        placeholder = "Курс"
+                                        placeholder = stringResource(id = R.string.study_year)
                                     )
                                     Text(
                                         modifier = Modifier.padding(start = 4.dp),
-                                        text = "Факультет",
+                                        text = stringResource(id = R.string.faculty),
                                         style = MaterialTheme.typography.h2,
                                         color = MaterialTheme.colors.secondaryVariant
                                     )
@@ -307,11 +312,11 @@ fun ReportScreen(
                                         onValueChanged = {
                                             viewModel.facultyTextChanged(it)
                                         },
-                                        placeholder = "Факультет"
+                                        placeholder = stringResource(id = R.string.faculty)
                                     )
                                     Text(
                                         modifier = Modifier.padding(start = 4.dp),
-                                        text = "Прізвище та ініціали старости",
+                                        text = stringResource(id = R.string.head_of_the_group),
                                         style = MaterialTheme.typography.h2,
                                         color = MaterialTheme.colors.secondaryVariant
                                     )
@@ -324,11 +329,11 @@ fun ReportScreen(
                                         onValueChanged = {
                                             viewModel.headOfGroupTextChanged(it)
                                         },
-                                        placeholder = "ПІБ"
+                                        placeholder = stringResource(id = R.string.initials)
                                     )
                                     Text(
                                         modifier = Modifier.padding(start = 4.dp),
-                                        text = "Прізвище та ініціали куратора",
+                                        text = stringResource(id = R.string.curator_of_the_group),
                                         style = MaterialTheme.typography.h2,
                                         color = MaterialTheme.colors.secondaryVariant
                                     )
@@ -341,7 +346,7 @@ fun ReportScreen(
                                         onValueChanged = {
                                             viewModel.curatorTextChanged(it)
                                         },
-                                        placeholder = "ПІБ"
+                                        placeholder = stringResource(id = R.string.initials)
                                     )
                                     Spacer(modifier = Modifier.height(65.dp))
                                 }
@@ -349,16 +354,11 @@ fun ReportScreen(
                             }
                         }
                     }
-
-
-
-
-
                 }
                 else{
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
                         Text(
-                            text = "Записів не додано",
+                            text = stringResource(id = R.string.no_entries_yet),
                             color = MaterialTheme.colors.secondaryVariant
                         )
                     }
@@ -367,7 +367,7 @@ fun ReportScreen(
             else{
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
                     Text(
-                        text = "Груп не додано",
+                        text = stringResource(id = R.string.no_groups_yet),
                         color = MaterialTheme.colors.secondaryVariant
                     )
                 }

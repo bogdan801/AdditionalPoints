@@ -70,16 +70,16 @@ data class CurrentStudyYearBorders(
             val secondSemester = semesters[1].split('-')
             if(secondSemester.size != 2) return defaultBorders
 
-            if(!firstSemester[0].isDigitsOnly()) return defaultBorders
+            if(!firstSemester[0].filter { it!='.' }.isDigitsOnly()) return defaultBorders
             val firstSemesterStart = firstSemester[0]
 
-            if(!firstSemester[1].isDigitsOnly()) return defaultBorders
+            if(!firstSemester[1].filter { it!='.' }.isDigitsOnly()) return defaultBorders
             val firstSemesterEnd = firstSemester[1]
 
-            if(!secondSemester[0].isDigitsOnly()) return defaultBorders
+            if(!secondSemester[0].filter { it!='.' }.isDigitsOnly()) return defaultBorders
             val secondSemesterStart = secondSemester[0]
 
-            if(!secondSemester[1].isDigitsOnly()) return defaultBorders
+            if(!secondSemester[1].filter { it!='.' }.isDigitsOnly()) return defaultBorders
             val secondSemesterEnd = secondSemester[1]
 
             return CurrentStudyYearBorders(firstSemesterStart, firstSemesterEnd, secondSemesterStart, secondSemesterEnd)

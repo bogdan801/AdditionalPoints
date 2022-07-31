@@ -10,9 +10,11 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bogdan801.additionalpoints.presentation.custom.composable.CustomButton
 import com.bogdan801.additionalpoints.presentation.custom.composable.CustomTextField
+import com.bogdan801.additionalpoints.R
 
 @Composable
 fun AddStudentDialog(
@@ -24,7 +26,7 @@ fun AddStudentDialog(
 ) {
     BasicDialogBox(
         isDialogOpen = showDialogState,
-        title = "Додавання студента"
+        title = stringResource(id = R.string.adding_student)
     ){
         Column(
             modifier = Modifier
@@ -34,7 +36,7 @@ fun AddStudentDialog(
         ) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = "Прізвище, ім'я, по батькові",
+                text = stringResource(id = R.string.full_name),
                 style = MaterialTheme.typography.h2,
                 color = MaterialTheme.colors.secondaryVariant
             )
@@ -45,11 +47,11 @@ fun AddStudentDialog(
                     .height(45.dp),
                 value = newStudentName,
                 onValueChanged = onNameChanged,
-                placeholder = "ПІБ"
+                placeholder = stringResource(id = R.string.initials)
             )
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = "Форма навчання",
+                text = stringResource(id = R.string.form_of_education),
                 style = MaterialTheme.typography.h2,
                 color = MaterialTheme.colors.secondaryVariant
             )
@@ -73,7 +75,7 @@ fun AddStudentDialog(
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
-                                text = "бюджет",
+                                text = stringResource(id = R.string.budget).lowercase(),
                                 color = MaterialTheme.colors.secondaryVariant
                             )
                             Checkbox(
@@ -104,7 +106,7 @@ fun AddStudentDialog(
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
-                                text = "контракт",
+                                text = stringResource(id = R.string.contract).lowercase(),
                                 color = MaterialTheme.colors.secondaryVariant
                             )
                             Checkbox(
@@ -122,10 +124,12 @@ fun AddStudentDialog(
             }
 
             CustomButton(
-                modifier = Modifier.padding(4.dp).height(45.dp),
+                modifier = Modifier
+                    .padding(4.dp)
+                    .height(45.dp),
                 onClick = onSaveNewStudentClick
             ) {
-                Text(text = "Зберегти", color = MaterialTheme.colors.onSecondary)
+                Text(text = stringResource(id = R.string.save), color = MaterialTheme.colors.onSecondary)
             }
         }
     }

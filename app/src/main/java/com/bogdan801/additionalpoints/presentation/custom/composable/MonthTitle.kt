@@ -9,7 +9,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
+import com.bogdan801.additionalpoints.data.util.getEnglishMonthName
 import com.bogdan801.additionalpoints.data.util.getUkrainianMonthName
 
 @Composable
@@ -18,12 +20,13 @@ fun MonthTitle(
     month: String = "01.2022",
     value: Float = 0f
 ) {
+    val locale = Locale.current
     Row(
         modifier = modifier.fillMaxWidth().padding(vertical = 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = getUkrainianMonthName(month).uppercase(), color = MaterialTheme.colors.secondaryVariant)
+        Text(text = if(locale == Locale("en-US")) getEnglishMonthName(month).uppercase() else getUkrainianMonthName(month).uppercase(), color = MaterialTheme.colors.secondaryVariant)
         Text(text = String.format("%.2f", value))
     }
 }

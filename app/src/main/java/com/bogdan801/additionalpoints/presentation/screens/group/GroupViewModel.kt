@@ -8,6 +8,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bogdan801.additionalpoints.R
 import com.bogdan801.additionalpoints.data.datastore.readStringFromDataStore
 import com.bogdan801.additionalpoints.data.datastore.saveIntToDataStore
 import com.bogdan801.additionalpoints.data.datastore.saveStringToDataStore
@@ -83,7 +84,6 @@ constructor(
         }
     }
 
-
     //DELETE GROUP DIALOG
     val showDeleteGroupDialogState = mutableStateOf(false)
 
@@ -139,7 +139,6 @@ constructor(
             }
             else{
                 _yearBordersState.value = CurrentStudyYearBorders.fromString(borders!!)
-                println()
             }
         }
         showSettingsDialogState.value = true
@@ -174,7 +173,7 @@ constructor(
         DatePickerDialog(context, { _, year, month, day ->
             val date = LocalDate(year = year, monthNumber = month+1, dayOfMonth = day)
             if(date >= _yearBordersState.value.firstSemesterEnd.toLocalDate()){
-                Toast.makeText(context, "Дата початку першого семестру не може бути пізніша за дату його кінця", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getText(R.string.settings_date_fs), Toast.LENGTH_LONG).show()
             }
             else{
                 _yearBordersState.value = _yearBordersState.value.copy(firstSemesterStart = "${day.toString().padStart(2, '0')}.${(month+1).toString().padStart(2, '0')}.${year}")
@@ -194,7 +193,7 @@ constructor(
         DatePickerDialog(context, { _, year, month, day ->
             val date = LocalDate(year = year, monthNumber = month+1, dayOfMonth = day)
             if(date <= _yearBordersState.value.firstSemesterStart.toLocalDate() || date >= _yearBordersState.value.secondSemesterStart.toLocalDate()){
-                Toast.makeText(context, "Дата кінця першого семестру має бути пізніша за початок першого семестру та раніша за початок другого", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getText(R.string.settings_date_fe), Toast.LENGTH_LONG).show()
             }
             else {
                 _yearBordersState.value = _yearBordersState.value.copy(firstSemesterEnd = "${day.toString().padStart(2, '0')}.${(month+1).toString().padStart(2, '0')}.${year}")
@@ -214,7 +213,7 @@ constructor(
         DatePickerDialog(context, { _, year, month, day ->
             val date = LocalDate(year = year, monthNumber = month+1, dayOfMonth = day)
             if(date <= _yearBordersState.value.firstSemesterEnd.toLocalDate() || date >= _yearBordersState.value.secondSemesterEnd.toLocalDate()){
-                Toast.makeText(context, "Дата початку другого семестру має бути пізніша за кінець першого семестру та раніша за кінець другого", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getText(R.string.settings_date_ss), Toast.LENGTH_LONG).show()
             }
             else{
                 _yearBordersState.value = _yearBordersState.value.copy(secondSemesterStart = "${day.toString().padStart(2, '0')}.${(month+1).toString().padStart(2, '0')}.${year}")
@@ -235,7 +234,7 @@ constructor(
         DatePickerDialog(context, { _, year, month, day ->
             val date = LocalDate(year = year, monthNumber = month+1, dayOfMonth = day)
             if(date <= _yearBordersState.value.secondSemesterStart.toLocalDate()){
-                Toast.makeText(context, "Дата кінця другого семестру не може бути раніша за дату його початку", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getText(R.string.settings_date_se), Toast.LENGTH_LONG).show()
             }
             else {
                 _yearBordersState.value = _yearBordersState.value.copy(secondSemesterEnd = "${day.toString().padStart(2, '0')}.${(month+1).toString().padStart(2, '0')}.${year}")

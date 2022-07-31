@@ -7,6 +7,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bogdan801.additionalpoints.R
 import com.bogdan801.additionalpoints.data.datastore.readIntFromDataStore
 import com.bogdan801.additionalpoints.data.datastore.readStringFromDataStore
 import com.bogdan801.additionalpoints.data.excel.report.AdditionalReportInfo
@@ -28,12 +29,9 @@ import javax.inject.Inject
 class ReportViewModel
 @Inject
 constructor(
-    private val repository: Repository
+    private val repository: Repository,
+    baseApp: BaseApplication
 ): ViewModel() {
-    //APPLICATION
-    @Inject
-    lateinit var baseApp: BaseApplication
-
     //DATA
     private val _selectedGroupIndexState =  mutableStateOf(0)
     val selectedGroupIndexState: State<Int> =  _selectedGroupIndexState
@@ -56,14 +54,14 @@ constructor(
         return isSelected
     }
 
-    fun selectGroup(index: Int){
+    fun selectGroup(index: Int, context: Context){
         _selectedGroupIndexState.value = index
-        getSelectedGroupMonths()
+        getSelectedGroupMonths(context)
     }
 
-    private fun getSelectedGroupMonths(){
-        val context = baseApp as Context
+    private fun getSelectedGroupMonths(context: Context){
         viewModelScope.launch {
+
             val areActivitiesShifted = context.readIntFromDataStore("isShifted") ?: 0
             var borders: CurrentStudyYearBorders? = null
             if (areActivitiesShifted == 1){
@@ -76,7 +74,6 @@ constructor(
             val listOfMonth: MutableList<String> = mutableListOf()
             students.forEach { student ->
                 val activitiesMap = student.getActivitiesByMonths(borders)
-                //val activitiesMap = student.getActivitiesByMonths(CurrentStudyYearBorders.defaultBorders)
                 activitiesMap.keys.forEach { month ->
                     if(!listOfMonth.contains(month)) listOfMonth.add(month)
                 }
@@ -168,21 +165,21 @@ constructor(
             }
             workbook.value = repository.generateReportWorkbook(
                 months = uniqueGroupMonthsState.value.filter { monthsStatesMap[it]?.value == true }, selectedGroup.groupID,
-                //additionalInfo = AdditionalReportInfo(Degree.values()[degreeIndexState.value], courseState.value, facultyState.value, headOfGroupState.value, curatorState.value, CurrentStudyYearBorders.defaultBorders),
                 additionalInfo = AdditionalReportInfo(Degree.values()[degreeIndexState.value], courseState.value, facultyState.value, headOfGroupState.value, curatorState.value, borders),
                 withGeneralSheet = _generalState.value
             )
 
-            launcher.launch("Звіт.xlsx")
+            launcher.launch(context.getString(R.string.report)+".xlsx")
         }
     }
 
-
     init {
+        val context = baseApp as Context
+
         viewModelScope.launch {
             repository.getGroups().collect{ groups ->
                 _groupListState.value = groups.map { it.toGroup() }
-                if(_groupListState.value.isNotEmpty()) selectGroup(selectedGroupIndexState.value)
+                if(_groupListState.value.isNotEmpty()) selectGroup(selectedGroupIndexState.value, context)
             }
         }
     }

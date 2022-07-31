@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -74,8 +75,11 @@ fun MenuDrawer(
         }
         Box(modifier = Modifier.fillMaxSize()){
             Text(
-                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp).align(Alignment.BottomCenter),
-                text = "Розробили: Дерига Б.Г. та Пахалюк К.Д.\nФІТ. КН-19001б. 2022",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+                    .align(Alignment.BottomCenter),
+                text = stringResource(id = R.string.developed_by),
                 textAlign = TextAlign.Center,
                 fontSize = 12.sp,
                 color = Color(0xFFC7C7C7)

@@ -11,6 +11,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import com.bogdan801.additionalpoints.R
 import com.bogdan801.additionalpoints.data.excel.util.createExcelURILauncher
 import com.bogdan801.additionalpoints.presentation.navigation.Navigation
 import com.bogdan801.additionalpoints.presentation.theme.AdditionalPointsTheme
@@ -25,7 +26,7 @@ class MainActivity : ComponentActivity() {
 
         val launcher = createExcelURILauncher(this){
             workbookState.value.write(contentResolver.openOutputStream(it))
-            Toast.makeText(this, "Файл було записано", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getText(R.string.file_saved), Toast.LENGTH_LONG).show()
         }
 
         setContent {

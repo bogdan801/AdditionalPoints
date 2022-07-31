@@ -13,12 +13,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import com.bogdan801.additionalpoints.R
 import com.bogdan801.additionalpoints.presentation.custom.composable.*
@@ -29,7 +28,6 @@ import com.bogdan801.additionalpoints.presentation.custom.composable.dialogbox.S
 import com.bogdan801.additionalpoints.presentation.custom.composable.drawer.DrawerMenuItem
 import com.bogdan801.additionalpoints.presentation.custom.composable.drawer.MenuDrawer
 import com.bogdan801.additionalpoints.presentation.navigation.Screen
-import com.bogdan801.additionalpoints.presentation.theme.AdditionalPointsTheme
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -78,10 +76,10 @@ fun GroupScreen(
             //side drawer
             MenuDrawer(
                 headerIconPainter = painterResource(id = R.drawable.ic_nubip_foreground),
-                headerTitle = "НУБІП. Додаткові бали"
+                headerTitle = stringResource(id = R.string.title_of_drawer)
             ){
                 DrawerMenuItem(
-                    description = "Головна",
+                    description = stringResource(id = R.string.main_drawer_item),
                     iconImageVector = Icons.Default.Home,
                     iconTint = MaterialTheme.colors.secondary,
                     onItemClick = {
@@ -91,7 +89,7 @@ fun GroupScreen(
                     }
                 )
                 DrawerMenuItem(
-                    description = "Генерація звіту",
+                    description = stringResource(id = R.string.report_drawer_item),
                     iconPainter = painterResource(id = R.drawable.baseline_description_24),
                     onItemClick = {
                         scope.launch {
@@ -101,7 +99,7 @@ fun GroupScreen(
                     }
                 )
                 DrawerMenuItem(
-                    description = "Довідка",
+                    description = stringResource(id = R.string.info_drawer_item),
                     iconImageVector = Icons.Default.Info,
                     onItemClick = {
                         scope.launch {
@@ -147,10 +145,10 @@ fun GroupScreen(
             onSaveClick = {
                 if(viewModel.newGroupNameState.value.isNotBlank()){
                     viewModel.addNewGroup()
-                    Toast.makeText(context, "Групу додано", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, context.getText(R.string.group_added), Toast.LENGTH_SHORT).show()
                 }
                 else{
-                    Toast.makeText(context, "Назва групи не може бути порожньою!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, context.getText(R.string.group_cant_be_empty), Toast.LENGTH_SHORT).show()
                 }
             }
         )
@@ -159,12 +157,12 @@ fun GroupScreen(
         DeleteGroupDialog(
             showDialogState = viewModel.showDeleteGroupDialogState,
             onDeleteGroupClick = {
-                Toast.makeText(context, "Групу ${viewModel.selectedGroup.name} видалено", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getText(R.string.group_deleted), Toast.LENGTH_SHORT).show()
                 viewModel.deleteSelectedGroup()
             },
             onDeleteGroupActivitiesClick = {
                 viewModel.deleteSelectedGroupActivities()
-                Toast.makeText(context, "Всі бали групи ${viewModel.selectedGroup.name} видалено", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getText(R.string.activities_deleted), Toast.LENGTH_SHORT).show()
             }
         )
 
@@ -181,7 +179,7 @@ fun GroupScreen(
                     viewModel.onSaveNewStudentClick()
                 }
                 else{
-                    Toast.makeText(context, "ПІБ студента не може бути порожнім!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, context.getText(R.string.student_name_cant_be_empty), Toast.LENGTH_SHORT).show()
                 }
             }
         )
@@ -226,7 +224,7 @@ fun GroupScreen(
                         ){
                             if(viewModel.budgetStudentsList.value.isNotEmpty()){
                                 item {
-                                    Text(modifier = Modifier.padding(8.dp), text = "БЮДЖЕТ")
+                                    Text(modifier = Modifier.padding(8.dp), text = stringResource(id = R.string.budget))
                                 }
                                 items(viewModel.budgetStudentsList.value){ student ->
                                     StudentCard(
@@ -245,7 +243,7 @@ fun GroupScreen(
                             }
                             if(viewModel.contractStudentsList.value.isNotEmpty()){
                                 item {
-                                    Text(modifier = Modifier.padding(8.dp), text = "КОНТРАКТ")
+                                    Text(modifier = Modifier.padding(8.dp), text = stringResource(id = R.string.contract))
                                 }
                                 items(viewModel.contractStudentsList.value){ student ->
                                     StudentCard(
@@ -270,7 +268,7 @@ fun GroupScreen(
                     else{
                         Text(
                             modifier = Modifier.align(Alignment.Center),
-                            text = "Додайте студентів",
+                            text = stringResource(id = R.string.add_students),
                             color = MaterialTheme.colors.secondaryVariant,
                             textAlign = TextAlign.Center
                         )
@@ -279,7 +277,7 @@ fun GroupScreen(
                 else{
                     Text(
                         modifier = Modifier.align(Alignment.Center),
-                        text = "Створіть групу",
+                        text = stringResource(id = R.string.create_group),
                         color = MaterialTheme.colors.secondaryVariant,
                         textAlign = TextAlign.Center
                     )

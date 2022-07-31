@@ -16,10 +16,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
+import com.bogdan801.additionalpoints.R
 
 @Composable
 fun CustomDropDownMenu(
@@ -52,21 +54,23 @@ fun CustomDropDownMenu(
                     textFieldSize = coordinates.size.toSize()
                 }
                 .clickable {
-                    if(data.isNotEmpty()) expanded = !expanded
+                    if (data.isNotEmpty()) expanded = !expanded
                 }
         ){
             Text(
                 modifier = Modifier
                     .align(Alignment.CenterStart)
-                    .padding(start = 8.dp, end = if(showIcon) 25.dp else 8.dp),
-                text = if(data.isEmpty()) "Груп ще не додано" else data[index],
+                    .padding(start = 8.dp, end = if (showIcon) 25.dp else 8.dp),
+                text = if(data.isEmpty()) stringResource(id = R.string.no_groups_yet) else data[index],
                 style = MaterialTheme.typography.h4,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
             if(data.isNotEmpty() && showIcon){
                 Icon(
-                    modifier = Modifier.align(Alignment.CenterEnd).padding(end = 8.dp),
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .padding(end = 8.dp),
                     imageVector = icon,
                     tint = MaterialTheme.colors.primary,
                     contentDescription = "Icon"

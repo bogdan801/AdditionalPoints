@@ -10,9 +10,11 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.bogdan801.additionalpoints.domain.model.ActivityInformation
+import com.bogdan801.additionalpoints.R
 
 @Composable
 fun ActivityInformationTable(
@@ -39,7 +41,7 @@ fun ActivityInformationTable(
             Modifier
                 .background(headerBackgroundColor)
                 .height(IntrinsicSize.Max)){
-            var headerText = listOf("Блок", "Пункт", "Опис", "Бал")
+            var headerText = listOf(stringResource(id = R.string.block), stringResource(id = R.string.paragraph), stringResource(id = R.string.description), stringResource(id = R.string.value))
             if(isHeaderUpper) headerText = headerText.map { it.uppercase() }
             TableCell(
                 text = headerText[0],

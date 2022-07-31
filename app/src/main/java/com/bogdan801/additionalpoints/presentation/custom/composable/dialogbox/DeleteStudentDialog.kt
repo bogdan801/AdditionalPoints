@@ -7,9 +7,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.bogdan801.additionalpoints.presentation.custom.composable.CustomButton
+import com.bogdan801.additionalpoints.R
 
 @Composable
 fun DeleteStudentDialog(
@@ -19,15 +21,19 @@ fun DeleteStudentDialog(
 ) {
     BasicDialogBox(
         isDialogOpen = showDialogState,
-        title = "Видалення"
+        title = stringResource(id = R.string.delete_student)
     ){
         Column(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
-                text = "Ви дійсно бажаєте видалити даного студента з групи?",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
+                text = stringResource(id = R.string.delete_student_confirm),
                 style = MaterialTheme.typography.h3,
                 color = MaterialTheme.colors.secondaryVariant,
                 textAlign = TextAlign.Center
@@ -36,24 +42,28 @@ fun DeleteStudentDialog(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 CustomButton(
-                    modifier= Modifier.width(150.dp).height(45.dp),
+                    modifier= Modifier
+                        .width(150.dp)
+                        .height(45.dp),
                     onClick = {
                         onDeleteStudentClick()
                         showDialogState.value = false
                     },
                     isOutlined = true
                 ) {
-                    Text(text = "Видалити", textAlign = TextAlign.Center)
+                    Text(text = stringResource(id = R.string.delete), textAlign = TextAlign.Center)
                 }
                 Spacer(modifier = Modifier.width(8.dp))
                 CustomButton(
-                    modifier= Modifier.width(150.dp).height(45.dp),
+                    modifier= Modifier
+                        .width(150.dp)
+                        .height(45.dp),
                     onClick = {
                         onCancelClick()
                         showDialogState.value = false
                     },
                 ) {
-                    Text(text = "Скасувати", textAlign = TextAlign.Center)
+                    Text(text = stringResource(id = R.string.cancel), textAlign = TextAlign.Center)
                 }
             }
         }

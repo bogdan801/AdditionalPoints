@@ -14,9 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.bogdan801.additionalpoints.R
 import com.bogdan801.additionalpoints.domain.model.StudentActivity
 
 @Composable
@@ -32,22 +34,26 @@ fun StudentActivityCard(
     elevation: Dp = 4.dp
 ) {
     Card(
-        modifier = modifier.clip(shape).clickable(onClick = onActivityClick),
+        modifier = modifier
+            .clip(shape)
+            .clickable(onClick = onActivityClick),
         shape = shape,
         backgroundColor = backgroundColor,
         contentColor = contentColor,
         border = border,
         elevation = elevation
     ){
-        Row(modifier = Modifier.fillMaxSize().height(IntrinsicSize.Min), verticalAlignment = Alignment.CenterVertically) {
+        Row(modifier = Modifier
+            .fillMaxSize()
+            .height(IntrinsicSize.Min), verticalAlignment = Alignment.CenterVertically) {
             Column(
                 modifier = Modifier
                     .padding(8.dp)
                     .weight(1f)
             ) {
                 Text(text = activity.description)
-                Text(text = "Блок ${activity.activityInformation.block}")
-                Text(text = "Пункт ${activity.activityInformation.paragraph}")
+                Text(text = stringResource(id = R.string.block) + " ${activity.activityInformation.block}")
+                Text(text = stringResource(id = R.string.paragraph) + " ${activity.activityInformation.paragraph}")
             }
             Box(
                 modifier = Modifier
@@ -57,7 +63,9 @@ fun StudentActivityCard(
                     .background(color = MaterialTheme.colors.secondaryVariant),
             )
             Box(
-                modifier = Modifier.fillMaxHeight().width(70.dp)
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(70.dp)
             ) {
                 Text(
                     modifier = Modifier.align(Alignment.Center),
@@ -80,7 +88,9 @@ fun StudentActivityCard(
                     .background(color = MaterialTheme.colors.secondaryVariant),
             )
             Box(
-                modifier = Modifier.fillMaxHeight().width(70.dp),
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(70.dp),
                 contentAlignment = Alignment.Center
             ) {
                 IconButton(

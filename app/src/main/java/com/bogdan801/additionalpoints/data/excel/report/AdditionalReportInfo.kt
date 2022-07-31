@@ -2,10 +2,9 @@ package com.bogdan801.additionalpoints.data.excel.report
 
 import com.bogdan801.additionalpoints.domain.model.CurrentStudyYearBorders
 
-
-enum class Degree(val degreeName: String){
-    Bachelor("Бакалавр"),
-    Master("Магістр")
+enum class Degree(val degreeName: String, val degreeNameEng: String){
+    Bachelor("Бакалавр", "Bachelor"),
+    Master("Магістр", "Master")
 }
 
 data class AdditionalReportInfo(

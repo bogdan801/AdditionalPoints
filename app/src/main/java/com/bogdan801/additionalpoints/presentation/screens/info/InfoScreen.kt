@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -47,7 +48,7 @@ fun InfoScreen(
                 title = {
                     Text(
                         modifier = Modifier.align(Alignment.Center),
-                        text = "Довідка",
+                        text = stringResource(id = R.string.info_drawer_item),
                         style = MaterialTheme.typography.h2
                     )
                 }
@@ -56,10 +57,10 @@ fun InfoScreen(
         drawerContent = {
             MenuDrawer(
                 headerIconPainter = painterResource(id = R.drawable.ic_nubip_foreground),
-                headerTitle = "НУБІП. Додаткові бали"
+                headerTitle = stringResource(id = R.string.title_of_drawer)
             ){
                 DrawerMenuItem(
-                    description = "Головна",
+                    description = stringResource(id = R.string.main_drawer_item),
                     iconImageVector = Icons.Default.Home,
                     onItemClick = {
                         scope.launch {
@@ -69,7 +70,7 @@ fun InfoScreen(
                     }
                 )
                 DrawerMenuItem(
-                    description = "Генерація звіту",
+                    description = stringResource(id = R.string.report_drawer_item),
                     iconPainter = painterResource(id = R.drawable.baseline_description_24),
                     onItemClick = {
                         scope.launch {
@@ -79,7 +80,7 @@ fun InfoScreen(
                     }
                 )
                 DrawerMenuItem(
-                    description = "Довідка",
+                    description = stringResource(id = R.string.info_drawer_item),
                     iconImageVector = Icons.Default.Info,
                     iconTint = MaterialTheme.colors.secondary,
                     onItemClick = {
