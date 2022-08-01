@@ -61,5 +61,10 @@
     <string name="full_name">Прізвище, ім\'я, по батькові</string>
     <string name="form_of_education">Форма навчання</string>
     <string name="file_saved">Файл було записано</string>
+    <string name="settings">Налаштування</string>
+    <string name="shift_activities">Здвигати бали, що не входять в семестр, на його початок</string>
+    <string name="year_limits">Межі даного навчального року</string>
+    <string name="first_semester">Перший семестр:</string>
+    <string name="second_semester">Другий семестр:</string>
 
 </resources>

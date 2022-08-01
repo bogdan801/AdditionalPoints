@@ -62,4 +62,9 @@
     <string name="full_name">Full name</string>
     <string name="form_of_education">Form of education</string>
     <string name="file_saved">The file has been saved</string>
+    <string name="settings">Settings</string>
+    <string name="shift_activities">Move the activities that are not included in the semester to its beginning</string>
+    <string name="year_limits">Limits of this academic year</string>
+    <string name="first_semester">First semester:</string>
+    <string name="second_semester">Second semester:</string>
 </resources>

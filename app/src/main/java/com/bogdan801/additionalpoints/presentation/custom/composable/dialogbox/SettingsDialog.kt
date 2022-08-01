@@ -9,11 +9,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.bogdan801.additionalpoints.domain.model.CurrentStudyYearBorders
 import com.bogdan801.additionalpoints.presentation.custom.composable.CustomButton
 import com.bogdan801.additionalpoints.presentation.custom.composable.CustomSwitch
+import com.bogdan801.additionalpoints.R
 
 @Composable
 fun SettingsDialog(
@@ -28,14 +30,14 @@ fun SettingsDialog(
 ){
     BasicDialogBox(
         isDialogOpen = showDialogState,
-        title = "Налаштування"
+        title = stringResource(id = R.string.settings)
     ) {
         Column(modifier = Modifier
             .fillMaxWidth()
         ) {
             Row(modifier = Modifier
                 .fillMaxWidth()
-                .height(70.dp)
+                .height(75.dp)
                 .background(MaterialTheme.colors.surface)
                 .clickable(onClick = onCheckBoxClick)
                 .padding(8.dp),
@@ -43,7 +45,7 @@ fun SettingsDialog(
             ){
                 Text(
                     modifier = Modifier.weight(1f),
-                    text = "Здвигати бали, що не входять в семестр, на його початок",
+                    text = stringResource(id = R.string.shift_activities),
                     color = MaterialTheme.colors.secondaryVariant
                 )
                 CustomSwitch(
@@ -56,14 +58,14 @@ fun SettingsDialog(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),
-                text = "Межі даного навчального року",
+                text = stringResource(id = R.string.year_limits),
                 style = MaterialTheme.typography.h3,
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colors.secondaryVariant
             )
             Text(
                 modifier = Modifier.padding(horizontal = 12.dp),
-                text = "Перший семестр:",
+                text = stringResource(id = R.string.first_semester),
                 color = MaterialTheme.colors.secondaryVariant
             )
             Row(modifier = Modifier
@@ -99,7 +101,7 @@ fun SettingsDialog(
             }
             Text(
                 modifier = Modifier.padding(horizontal = 12.dp),
-                text = "Другий семестр:",
+                text = stringResource(id = R.string.second_semester),
                 color = MaterialTheme.colors.secondaryVariant
             )
             Row(modifier = Modifier

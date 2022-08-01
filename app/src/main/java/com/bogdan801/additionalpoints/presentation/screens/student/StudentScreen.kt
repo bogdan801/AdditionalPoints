@@ -101,7 +101,7 @@ fun StudentScreen(
                     }
                 )
                 DrawerMenuItem(
-                    description = stringResource(id = R.string.report_drawer_item),
+                    description = stringResource(id = R.string.info_drawer_item),
                     iconImageVector = Icons.Default.Info,
                     onItemClick = {
                         scope.launch {
