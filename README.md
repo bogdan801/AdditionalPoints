@@ -1,4 +1,4 @@
-<img src="promo/promo.png"/>
+<img src="promo/EngHeader.png"/>
 
 # NULES. Additional points
 The app that helps with management of additional points of NULES students. Save, sum up and generate an Excel reprort in one click.
