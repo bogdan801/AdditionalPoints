@@ -23,7 +23,7 @@ The app that helps with management of additional points of NULES students. Save,
 
 ### Info screen
 
-img src="Screenshots/eng/phone/InfoEng.png" width="300" height="585">
+<img src="Screenshots/eng/phone/InfoEng.png" width="300" height="585">
 
 ## Technologies used to make an app
 - [Kotlin](https://kotlinlang.org/)
