@@ -16,14 +16,14 @@ The app that helps with management of additional points of NULES students. Save,
 
 ### Student screen
 
-<img src="Screenshots/eng/phone/StudentEng.png" width="270" height="585">      <img src="Screenshots/eng/phone/AddActEng.png" width="270" height="585">
+<img src="Screenshots/eng/phone/StudentEng.png" width="300" height="585">      <img src="Screenshots/eng/phone/AddActEng.png" width="300" height="585">
 
 ### Report screen
-<img src="Screenshots/eng/phone/ReportEng.png" width="270" height="585">      <img src="Screenshots/eng/phone/ExcelEng.png" width="270" height="585">
+<img src="Screenshots/eng/phone/ReportEng.png" width="300" height="585">      <img src="Screenshots/eng/phone/ExcelEng.png" width="300" height="585">
 
 ### Info screen
 
-img src="Screenshots/eng/phone/InfoEng.png" width="270" height="585">
+img src="Screenshots/eng/phone/InfoEng.png" width="300" height="585">
 
 ## Technologies used to make an app
 - [Kotlin](https://kotlinlang.org/)
