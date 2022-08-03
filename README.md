@@ -12,7 +12,7 @@ The app that helps with management of additional points of NULES students. Save,
 ## Overview
 ### Group screen
 
-<img src="Screenshots/eng/phone/GroupEng.png" width="270" height="585">
+<img src="Screenshots/eng/phone/GroupEng.png" width="300" height="585">
 
 ### Student screen
 
