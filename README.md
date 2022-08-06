@@ -31,8 +31,9 @@ The app that helps with management of additional points of NULES students. Save,
 - [Compose Navigation](https://developer.android.com/jetpack/compose/navigation)
 - MVVM Architecture
 - [Dagger-hilt](https://dagger.dev/hilt/) for dependency injection
-- [Room](https://developer.android.com/training/data-storage/room) database for storing notes and tasks
+- [Room](https://developer.android.com/training/data-storage/room) local database
 - [Data store](https://developer.android.com/topic/libraries/architecture/datastore) for saving preferences
+- [Apache POI](https://poi.apache.org/) for creating an Excel report
 
 ## License
 ```
